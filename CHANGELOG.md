@@ -8,6 +8,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Phase 9: AI Framework Integrations**:
+  - **Decoupled Architecture & Optional Extras**:
+    - Optional package extras configured in `pyproject.toml`: `langgraph`, `transformers`, `fastapi`, and `all-integrations`.
+    - Pure adapter interfaces operating on standard dictionaries and Pydantic schemas without leaking internal library state or forcing heavy dependencies on core AMARA installations.
+  - **LangGraph Memory Adapter (`AmaraLangGraphAdapter`)**:
+    - `create_pre_retrieval_node`: Reconstructs grounded memory context and structured citations (`[REF-N]`) before agent reasoning steps, packing into state keys (`context`, `memory_citations`).
+    - `create_post_extraction_node`: Observes agent dialogue turns and persists them as episodic interactions while extracting semantic propositions.
+    - `create_memory_action_node`: Executes explicit agent-directed memory operations (remembering rules, forgetting facts).
+    - `create_shared_project_node`: Retrieves multi-agent team standards, architectural invariants, and runbooks from shared tenant namespaces.
+    - Full async (`ainvoke`) and synchronous worker thread (`invoke`) compatibility.
+  - **Hugging Face Transformers Wrapper (`AmaraTransformersWrapper`)**:
+    - External prompt context augmentation without modifying model weights, tokenizer vocabularies, or claiming pseudo-continual learning.
+    - Structured `AmaraGenerationResult` returning generated text, augmented prompt with anchor headers (`### AMARA Verified Cognitive Memory Context`), and verified citations.
+    - Automatic turn logging (`auto_remember=True`) preserving conversation history across generation calls.
+  - **FastAPI External Service Integration**:
+    - Distributed `AmaraClient` supporting connection pooling, timeout handling, and automatic bearer authentication (`Authorization: Bearer <api_key>`).
+    - `AmaraMemoryDependency`: FastAPI dependency injection provider delivering authenticated client instances and namespace scoping to route handlers.
+    - `AmaraSessionMiddleware`: ASGI middleware extracting session identifiers (`X-Session-ID`) and tracking per-session memory state.
+  - **Generic Python Agent Facade (`AmaraAgentMemory`, `GroundedContext`)**:
+    - Framework-agnostic cognitive memory facade for custom autonomous agent loops.
+    - Lifecycle hooks: `before_step(prompt)`, `after_step(prompt, response)`, `alearn_fact(fact)`, `alearn_procedure(steps)`, and `aforget(memory_id)`.
+  - **Executable Walkthrough Reference Applications (`examples/`)**:
+    - `examples/multi_session_chatbot.py`: Multi-turn user profile updates across sessions with conflict superseding (Austin superseding Seattle) and citation-grounded answers.
+    - `examples/langgraph_assistant.py`: Stateful LangGraph workflow demonstrating pre-retrieval, reasoning, post-extraction, and explicit memory action nodes.
+    - `examples/project_aware_coding_assistant.py`: Code-generation assistant adhering to ingested architecture standards, type invariants, and runbooks.
+    - `examples/customer_support_assistant.py`: Enterprise support ticket triage leveraging SLA guarantees, key contacts, and incident runbooks.
+  - **Comprehensive Integration Test Suite**:
+    - `tests/test_integrations_langgraph.py`: Validates pre-retrieval, post-extraction, explicit actions, and sync adapters.
+    - `tests/test_integrations_huggingface.py`: Validates prompt context injection and citation extraction.
+    - `tests/test_integrations_fastapi.py`: Validates client calls, dependency injection, and 3rd-party FastAPI app integration.
+    - `tests/test_integrations_generic_agent.py`: Validates autonomous agent before/after lifecycle, fact ingestion, procedural learning, and forgetting.
 - **Phase 8: Developer Dashboard**:
   - **Full-Featured Modern Developer Console (Next.js 14 App Router, TypeScript, Tailwind CSS)**:
     - Minimal, technical, modern AI infrastructure visual identity with class-based Dark and Light themes.

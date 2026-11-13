@@ -54,6 +54,16 @@ from amara.exceptions import (
     TenantIsolationError,
     TokenBudgetExceededError,
 )
+from amara.integrations import (
+    AmaraAgentMemory,
+    AmaraClient,
+    AmaraGenerationResult,
+    AmaraLangGraphAdapter,
+    AmaraMemoryDependency,
+    AmaraSessionMiddleware,
+    AmaraTransformersWrapper,
+    GroundedContext,
+)
 from amara.intelligence import MemoryIngestionPipeline
 from amara.lifecycle import (
     ConsolidationCandidate,
@@ -101,8 +111,15 @@ from amara.version import __version__
 __all__ = [
     "APIKeyRecord",
     "APIKeyStore",
+    "AmaraAgentMemory",
+    "AmaraClient",
     "AmaraConfig",
     "AmaraError",
+    "AmaraGenerationResult",
+    "AmaraLangGraphAdapter",
+    "AmaraMemoryDependency",
+    "AmaraSessionMiddleware",
+    "AmaraTransformersWrapper",
     "CallableTokenCounter",
     "CognitiveMemoryError",
     "ConfigurationError",
@@ -123,6 +140,7 @@ __all__ = [
     "ExpirationResult",
     "ExtractionError",
     "ForgettingManager",
+    "GroundedContext",
     "HeuristicTokenCounter",
     "InspectionResult",
     "IntelligenceError",

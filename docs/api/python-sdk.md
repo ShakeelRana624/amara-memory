@@ -90,20 +90,22 @@ Ingests, normalizes, extracts facts/entities, computes semantic embeddings, dedu
 item = await engine.remember(
     content="Customer account Tier is Enterprise with 99.99% SLA commitment.",
     author_id="crm_sync_agent",
-    memory_type="semantic",          # working, episodic, semantic, procedural, associative
-    confidence=0.95,                 # 0.0 to 1.0
-    importance=0.90,                 # 0.0 to 1.0
-    tenant_id="tenant_acme",         # Optional override
-    namespace="production",          # Optional partition
-    session_id="session_402",        # Optional thread link
+    memory_type="semantic",  # working, episodic, semantic, procedural, associative
+    confidence=0.95,  # 0.0 to 1.0
+    importance=0.90,  # 0.0 to 1.0
+    tenant_id="tenant_acme",  # Optional override
+    namespace="production",  # Optional partition
+    session_id="session_402",  # Optional thread link
     metadata={"contract_id": "C-981"},
-    valid_from=None,                 # Defaults to UTC now
-    valid_to=None,                   # Optional temporal expiration
-    evidence=[{
-        "source_reference": "CRM Contract #981",
-        "raw_payload": "Guaranteed availability 99.99%",
-        "confidence_score": 1.0
-    }],
+    valid_from=None,  # Defaults to UTC now
+    valid_to=None,  # Optional temporal expiration
+    evidence=[
+        {
+            "source_reference": "CRM Contract #981",
+            "raw_payload": "Guaranteed availability 99.99%",
+            "confidence_score": 1.0,
+        }
+    ],
 )
 ```
 
@@ -115,7 +117,7 @@ from amara.retrieval.types import RetrievalStrategy
 
 results = await engine.recall(
     query="customer contract SLA commitments",
-    strategy=RetrievalStrategy.HYBRID, # DENSE_VECTOR, LEXICAL_SPARSE, TEMPORAL_RECENCY, RELATIONAL_GRAPH, HYBRID
+    strategy=RetrievalStrategy.HYBRID,  # DENSE_VECTOR, LEXICAL_SPARSE, TEMPORAL_RECENCY, RELATIONAL_GRAPH, HYBRID
     top_k=5,
     tenant_id="tenant_acme",
     namespace="production",

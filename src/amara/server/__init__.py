@@ -18,4 +18,3 @@ __all__ = [
     "RequestSizeLimitMiddleware",
     "create_app",
 ]
-

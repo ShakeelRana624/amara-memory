@@ -114,4 +114,3 @@ class EngineStats(BaseModel):
     by_status: dict[str, int]
     average_confidence: float
     average_importance: float
-
