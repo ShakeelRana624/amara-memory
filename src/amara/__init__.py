@@ -44,6 +44,12 @@ from amara.models.record import MemoryRecord, normalize_text
 from amara.models.relationship import MemoryRelationship
 from amara.models.source import MemorySource
 from amara.models.temporal import TemporalValidity
+from amara.retrieval import (
+    MemoryRetrievalEngine,
+    MemorySearchResult,
+    RetrievalResponse,
+    RetrievalStrategy,
+)
 from amara.version import __version__
 
 __all__ = [
@@ -68,6 +74,8 @@ __all__ = [
     "MemoryNotFoundError",
     "MemoryRecord",
     "MemoryRelationship",
+    "MemoryRetrievalEngine",
+    "MemorySearchResult",
     "MemorySource",
     "MemoryState",
     "MemoryType",
@@ -76,6 +84,8 @@ __all__ = [
     "ProviderError",
     "RelationType",
     "RepositoryError",
+    "RetrievalResponse",
+    "RetrievalStrategy",
     "SalienceLevel",
     "SecurityConfig",
     "StorageCapacityExceededError",

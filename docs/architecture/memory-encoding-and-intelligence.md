@@ -159,3 +159,4 @@ When an incoming proposition conflicts with an existing fact for a single-valued
 - **Fail-Safe Provider Error Handling:** When remote or primary intelligence providers encounter network timeouts, API quota exhaustions, or formatting failures:
   - If `enable_fallback_on_provider_error=True`: gracefully fails over to the local deterministic rule-based extractor.
   - If `enable_fallback_on_provider_error=False`: cleanly wraps and raises domain `ProviderError` without leaking credentials or leaving partial transactions.
+

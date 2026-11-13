@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Phase 5: Hybrid Memory Retrieval Engine**:
+  - `QueryAnalyzer`: Query normalization, intent classification (`FACT_LOOKUP`, `PROCEDURAL_GUIDANCE`, `TEMPORAL_HISTORY`, `PREFERENCE_CHECK`, `GENERAL_REASONING`), keyword extraction with stopword removal, entity recognition, and attribute detection.
+  - `SemanticRetriever`: Dense vector cosine similarity search using unit-normalized 1536-dim embeddings.
+  - `LexicalRetriever`: High-precision keyword token matching, exact phrase bonuses, entity bonuses, and attribute bonuses.
+  - `TemporalRetriever`: Bi-temporal interval gating and exponential half-life recency decay.
+  - `RelationalRetriever`: Multi-hop graph edge traversal across `CONTRADICTS`, `DEPENDS_ON`, `CAUSAL`, `ENTITY_ATTRIBUTE`, `ASSOCIATED_WITH`.
+  - `HybridRetriever`: Parallel multi-channel candidate generation and score fusion using configurable channel weights.
+  - `MemoryReranker`: Multi-factor cognitive reranking combining match relevance, intrinsic importance (salience), recency decay, cognitive utility, and historical supersede modulation.
+  - `MemoryRetrievalEngine`: High-level facade orchestrating search strategies, hydrating graph relationships without fabricating evidence, enforcing strict tenant isolation, and delivering detailed telemetry.
+  - Benchmark evaluation suite verifying Recall@K, Precision@K, MRR, and latency on exact facts, semantic paraphrases, historical facts, updated facts, contradictions, unrelated questions, empty results, and cross-tenant isolation.
 - **Phase 4: Memory Encoding and Intelligence Engine**:
   - `InputNormalizer`: Unicode NFKC canonical normalization, ANSI sequence stripping, whitespace regularization, and SHA-256 cryptographic hashing.
   - Multi-modal `MemoryClassifier`: Heuristic and structural classification into `WORKING`, `EPISODIC`, `SEMANTIC`, `PROCEDURAL`, and `ASSOCIATIVE`.
