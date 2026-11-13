@@ -112,3 +112,4 @@ For commercial licensing agreements, custom enterprise on-premise deployments, o
 - **Commercial Inquiries**: [commercial@amara.ai](mailto:commercial@amara.ai)
 - **Repository**: [https://github.com/ShakeelRana624/amara-memory](https://github.com/ShakeelRana624/amara-memory)
 - **Copyright**: &copy; 2026 AMARA. All Rights Reserved.
+

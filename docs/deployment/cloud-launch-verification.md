@@ -50,3 +50,4 @@ Verify that all 13 interactive portal modules function seamlessly in production:
 - **Cross-Tenant Attack Simulation**: An authenticated API key from `tenant_alpha` attempting to retrieve or update a memory belonging to `tenant_beta` yields HTTP 404 (or HTTP 403 on administration endpoints).
 - **SQL Injection Defense**: Strict parameterized queries across SQLAlchemy and asyncpg prevent SQL injection vulnerabilities.
 - **Rate Limit Defense**: Rapid bursts exceeding 120 req/minute return HTTP 429 (`Too Many Requests`) with a standard `Retry-After` header.
+
