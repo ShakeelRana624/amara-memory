@@ -91,3 +91,4 @@ export function RelationBadge({ relation }: { relation: string }) {
       return <Badge variant="outline">{relation.toUpperCase()}</Badge>;
   }
 }
+

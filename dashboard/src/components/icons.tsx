@@ -485,3 +485,4 @@ export function ClockIcon({ className = "w-4 h-4", ...props }: IconProps) {
     </svg>
   );
 }
+
