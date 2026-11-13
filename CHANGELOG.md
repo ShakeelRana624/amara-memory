@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Phase 6: Adaptive Lifecycle and Context Reconstruction**:
+  - The Seven Lifecycle Operations: `retain`, `update`, `consolidate`, `archive`, `restore`, `expire`, and `delete` orchestrated via `MemoryLifecycleManager`.
+  - Multi-attribute `MemoryPolicyManager`: Evaluates exponential recency decay ($T_{1/2}$ half-life), logistic retrieval utility scoring, access frequency saturation, and intrinsic importance while maintaining strict separation between importance, reliability (epistemic confidence), and retrieval relevance.
+  - User-Controlled Retention Locks: Implemented `record.set_retention_lock(True)` and `RetentionLockError` enforcement to protect critical user preferences, credentials, and compliance holds from automated decay, archival, or deletion.
+  - Contradiction-Gated `MemoryConsolidator`: Clusters near-duplicate and related episodic memories, performs semantic synthesis, creates `RelationType.DERIVED_FROM` lineage associations, preserves ancestor evidence and sources, and strictly prevents merging contradictory propositions into a single asserted fact.
+  - Adaptive `ForgettingManager`: Soft tombstoning (`LifecycleStatus.TOMBSTONED`), cascade hard deletion, policy-driven archival (`LifecycleStatus.ARCHIVED`), restoration (`LifecycleStatus.ACTIVE`), and TTL expiration scans with immutable audit logging (`LifecycleAuditRecord`).
+  - Pluggable `TokenCounter` Architecture: Zero-dependency deterministic `HeuristicTokenCounter`, pluggable `TiktokenTokenCounter` with graceful fallback, and `CallableTokenCounter` adapter.
+  - 8-Stage `ContextReconstructionEngine`: Query acceptance, multi-channel hybrid retrieval, composite evidence ranking ($w_{\text{rel}} \cdot S_{\text{rel}} + w_{\text{conf}} \cdot S_{\text{conf}} + w_{\text{imp}} \cdot S_{\text{imp}}$), abstention gating on low-confidence queries ($\theta_{\text{abstain}}$), greedy redundancy removal, temporal validity anchoring, token budget packing, and structured citation tagging (`[REF-N]`).
+  - Comprehensive unit and integration test suites: 181 passing tests across in-memory and live PostgreSQL 16 + pgvector storage backends with 100% strict Mypy and Ruff validation.
 - **Phase 5: Hybrid Memory Retrieval Engine**:
   - `QueryAnalyzer`: Query normalization, intent classification (`FACT_LOOKUP`, `PROCEDURAL_GUIDANCE`, `TEMPORAL_HISTORY`, `PREFERENCE_CHECK`, `GENERAL_REASONING`), keyword extraction with stopword removal, entity recognition, and attribute detection.
   - `SemanticRetriever`: Dense vector cosine similarity search using unit-normalized 1536-dim embeddings.

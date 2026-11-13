@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import datetime
 from collections.abc import Mapping, Sequence
+from typing import Any
 from uuid import UUID
 
 from amara.contracts.event_bus import MemoryEventHandler, MemoryEventPublisher
@@ -70,6 +71,19 @@ class MockMemoryRepository:
         _relation_type: RelationType | None = None,
     ) -> Sequence[MemoryRelationship]:
         return []
+
+    async def update_memory(
+        self,
+        tenant_id: str,
+        memory_id: UUID,
+        expected_version: int,
+        content: str | None = None,
+        status: LifecycleStatus | None = None,
+        metadata: Mapping[str, Any] | None = None,
+        changed_by: str = "system",
+        change_reason: str | None = None,
+    ) -> MemoryRecord:
+        raise NotImplementedError
 
     async def create_memory(self, record: MemoryRecord) -> MemoryRecord:
         return record

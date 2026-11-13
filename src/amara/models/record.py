@@ -34,6 +34,7 @@ LEGAL_TRANSITIONS: Mapping[LifecycleStatus, set[LifecycleStatus]] = {
         LifecycleStatus.CONSOLIDATED,
         LifecycleStatus.SUPERSEDED,
         LifecycleStatus.ARCHIVED,
+        LifecycleStatus.EXPIRED,
         LifecycleStatus.TOMBSTONED,
     },
     LifecycleStatus.DECAYING: {
@@ -42,21 +43,33 @@ LEGAL_TRANSITIONS: Mapping[LifecycleStatus, set[LifecycleStatus]] = {
         LifecycleStatus.CONSOLIDATED,
         LifecycleStatus.SUPERSEDED,
         LifecycleStatus.ARCHIVED,
+        LifecycleStatus.EXPIRED,
         LifecycleStatus.TOMBSTONED,
     },
     LifecycleStatus.CONSOLIDATED: {
+        LifecycleStatus.ACTIVE,
         LifecycleStatus.CONSOLIDATED,
         LifecycleStatus.SUPERSEDED,
         LifecycleStatus.ARCHIVED,
+        LifecycleStatus.EXPIRED,
         LifecycleStatus.TOMBSTONED,
     },
     LifecycleStatus.SUPERSEDED: {
+        LifecycleStatus.ACTIVE,
         LifecycleStatus.SUPERSEDED,
         LifecycleStatus.ARCHIVED,
+        LifecycleStatus.EXPIRED,
         LifecycleStatus.TOMBSTONED,
     },
     LifecycleStatus.ARCHIVED: {
+        LifecycleStatus.ACTIVE,
         LifecycleStatus.ARCHIVED,
+        LifecycleStatus.TOMBSTONED,
+    },
+    LifecycleStatus.EXPIRED: {
+        LifecycleStatus.ACTIVE,
+        LifecycleStatus.ARCHIVED,
+        LifecycleStatus.EXPIRED,
         LifecycleStatus.TOMBSTONED,
     },
     LifecycleStatus.TOMBSTONED: {
@@ -181,6 +194,21 @@ class MemoryRecord(BaseModel):
         """Return True if record has been soft-deleted / tombstoned."""
         return self.status == LifecycleStatus.TOMBSTONED
 
+    @property
+    def is_archived(self) -> bool:
+        """Return True if record is in ARCHIVED lifecycle status."""
+        return self.status == LifecycleStatus.ARCHIVED
+
+    @property
+    def is_expired(self) -> bool:
+        """Return True if record is in EXPIRED lifecycle status."""
+        return self.status == LifecycleStatus.EXPIRED
+
+    @property
+    def is_retention_locked(self) -> bool:
+        """Return True if record is protected by a retention lock."""
+        return bool(self.metadata.get("retention_lock", False))
+
     def is_valid_at(self, reference_time: datetime.datetime) -> bool:
         """Check whether record is temporally valid at reference time."""
         return self.temporal.is_valid_at(reference_time)
@@ -248,6 +276,25 @@ class MemoryRecord(BaseModel):
     def soft_delete(self, deleted_at: datetime.datetime | None = None) -> None:
         """Transition record to TOMBSTONED lifecycle status."""
         self.update_status(LifecycleStatus.TOMBSTONED, updated_at=deleted_at)
+
+    def archive(self, archived_at: datetime.datetime | None = None) -> None:
+        """Transition record to ARCHIVED lifecycle status."""
+        self.update_status(LifecycleStatus.ARCHIVED, updated_at=archived_at)
+
+    def restore(self, restored_at: datetime.datetime | None = None) -> None:
+        """Restore an archived, superseded, or expired record back to ACTIVE status."""
+        self.update_status(LifecycleStatus.ACTIVE, updated_at=restored_at)
+
+    def expire(self, expired_at: datetime.datetime | None = None) -> None:
+        """Transition record to EXPIRED lifecycle status."""
+        self.update_status(LifecycleStatus.EXPIRED, updated_at=expired_at)
+
+    def set_retention_lock(self, locked: bool = True) -> None:
+        """Set or unset the retention lock protecting this record from deletion/archival."""
+        meta = dict(self.metadata)
+        meta["retention_lock"] = locked
+        self.metadata = meta
+        self.updated_at = datetime.datetime.now(datetime.UTC)
 
     # -----------------------------------------------------------------------
     # Factory Methods

@@ -3,13 +3,23 @@
 from __future__ import annotations
 
 import datetime
+import re
 from collections.abc import Sequence
+from dataclasses import dataclass
 from typing import ClassVar
 
 from amara.contracts.query import QueryFilter, QuerySpec
 from amara.contracts.repository import MemoryRepository
 from amara.intelligence.types import ContradictionCandidate, IngestionCandidate
 from amara.models.record import MemoryRecord
+
+
+@dataclass(frozen=True)
+class ContradictionCheckResult:
+    """Outcome of pairwise contradiction evaluation."""
+
+    is_contradiction: bool
+    rationale: str = ""
 
 
 class ContradictionDetector:
@@ -31,8 +41,82 @@ class ContradictionDetector:
         "is_a",
     }
 
-    def __init__(self, repository: MemoryRepository) -> None:
+    _NEGATION_WORDS: ClassVar[set[str]] = {
+        "not",
+        "never",
+        "no",
+        "isnt",
+        "isn't",
+        "arent",
+        "aren't",
+        "cannot",
+        "cant",
+        "can't",
+        "wont",
+        "won't",
+    }
+
+    def __init__(self, repository: MemoryRepository | None = None) -> None:
         self.repository = repository
+
+    def detect(self, m1: MemoryRecord, m2: MemoryRecord) -> ContradictionCheckResult:
+        """Evaluate pairwise conflict between two records without requiring database access."""
+        # 1. Compare structured facts if present in metadata
+        facts1 = m1.metadata.get("facts", [])
+        facts2 = m2.metadata.get("facts", [])
+
+        if facts1 and facts2:
+            for f1 in facts1:
+                s1 = str(f1.get("subject", "")).lower()
+                p1 = str(f1.get("predicate", "")).lower()
+                o1 = str(f1.get("object", "")).lower()
+                n1 = bool(f1.get("is_negated", False))
+
+                for f2 in facts2:
+                    s2 = str(f2.get("subject", "")).lower()
+                    p2 = str(f2.get("predicate", "")).lower()
+                    o2 = str(f2.get("object", "")).lower()
+                    n2 = bool(f2.get("is_negated", False))
+
+                    if s1 == s2 and p1 == p2:
+                        if n1 != n2 and o1 == o2:
+                            return ContradictionCheckResult(
+                                is_contradiction=True,
+                                rationale=f"Negation conflict on entity '{s1}' attribute '{p1}'.",
+                            )
+                        if (
+                            o1 != o2
+                            and not n1
+                            and not n2
+                            and any(p in p1 for p in self._SINGLE_VALUED_PREDICATES)
+                        ):
+                            return ContradictionCheckResult(
+                                is_contradiction=True,
+                                rationale=(
+                                    f"Mutually exclusive values for predicate '{p1}': "
+                                    f"'{o1}' vs '{o2}'."
+                                ),
+                            )
+
+        # 2. Text-based polarity and negation conflict heuristic
+        tokens1 = set(re.findall(r"\b[a-zA-Z0-9_-]+\b", m1.normalized_content.lower()))
+        tokens2 = set(re.findall(r"\b[a-zA-Z0-9_-]+\b", m2.normalized_content.lower()))
+
+        has_neg1 = bool(tokens1 & self._NEGATION_WORDS)
+        has_neg2 = bool(tokens2 & self._NEGATION_WORDS)
+
+        core1 = tokens1 - self._NEGATION_WORDS
+        core2 = tokens2 - self._NEGATION_WORDS
+
+        if core1 and core2:
+            overlap = len(core1 & core2) / len(core1 | core2)
+            if overlap >= 0.70 and (has_neg1 != has_neg2):
+                return ContradictionCheckResult(
+                    is_contradiction=True,
+                    rationale="Direct polarity negation conflict across shared propositions.",
+                )
+
+        return ContradictionCheckResult(is_contradiction=False)
 
     async def detect_contradictions(
         self, candidate: IngestionCandidate
@@ -49,6 +133,9 @@ class ContradictionDetector:
         - Confidence score
         """
         contradictions: list[ContradictionCandidate] = []
+        if self.repository is None:
+            return contradictions
+
         rec = candidate.record
 
         # If candidate has no discrete facts, check text content heuristic

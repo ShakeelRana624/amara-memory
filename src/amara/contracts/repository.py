@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import datetime
-from collections.abc import Sequence
-from typing import Protocol, runtime_checkable
+from collections.abc import Mapping, Sequence
+from typing import Any, Protocol, runtime_checkable
 from uuid import UUID
 
 from amara.contracts.query import QuerySpec
@@ -78,6 +78,20 @@ class MemoryRepository(Protocol):
         relation_type: RelationType | None = None,
     ) -> Sequence[MemoryRelationship]:
         """Retrieve association edges connected to the specified memory record."""
+        ...
+
+    async def update_memory(
+        self,
+        tenant_id: str,
+        memory_id: UUID,
+        expected_version: int,
+        content: str | None = None,
+        status: LifecycleStatus | None = None,
+        metadata: Mapping[str, Any] | None = None,
+        changed_by: str = "system",
+        change_reason: str | None = None,
+    ) -> MemoryRecord:
+        """Controlled update of a memory record with optimistic concurrency validation."""
         ...
 
     async def create_memory(self, record: MemoryRecord) -> MemoryRecord:

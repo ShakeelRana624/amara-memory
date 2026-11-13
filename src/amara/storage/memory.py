@@ -8,7 +8,8 @@ from __future__ import annotations
 import asyncio
 import datetime
 from collections import defaultdict
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
+from typing import Any
 from uuid import UUID
 
 from amara.contracts.query import QuerySpec
@@ -223,6 +224,43 @@ class InMemoryMemoryRepository:
             return sum(
                 1 for r in tenant_store.values() if r.namespace == namespace and not r.is_tombstoned
             )
+
+    async def update_memory(
+        self,
+        tenant_id: str,
+        memory_id: UUID,
+        expected_version: int,
+        content: str | None = None,
+        status: LifecycleStatus | None = None,
+        metadata: Mapping[str, Any] | None = None,
+        _changed_by: str = "system",
+        _change_reason: str | None = None,
+    ) -> MemoryRecord:
+        """Controlled update of a memory record with optimistic concurrency validation."""
+        async with self._lock:
+            tenant_store = self._records.get(tenant_id)
+            if not tenant_store or memory_id not in tenant_store:
+                raise MemoryNotFoundError(memory_id, tenant_id=tenant_id)
+
+            rec = tenant_store[memory_id]
+            if rec.version != expected_version:
+                raise RepositoryError(
+                    f"Optimistic concurrency failure: record version {rec.version} does not match "
+                    f"expected {expected_version}."
+                )
+
+            now = datetime.datetime.now(datetime.UTC)
+            if content is not None:
+                rec.update_content(content, updated_at=now)
+            if status is not None:
+                rec.update_status(status, updated_at=now)
+            if metadata is not None:
+                merged = dict(rec.metadata)
+                merged.update(metadata)
+                rec.metadata = merged
+                rec.updated_at = now
+
+            return rec
 
     async def update_status(self, tenant_id: str, memory_id: UUID, status: LifecycleStatus) -> None:
         """Update lifecycle status of a memory record."""

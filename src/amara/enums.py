@@ -28,6 +28,7 @@ class LifecycleStatus(enum.StrEnum):
     CONSOLIDATED = "consolidated"
     SUPERSEDED = "superseded"
     ARCHIVED = "archived"
+    EXPIRED = "expired"
     TOMBSTONED = "tombstoned"
 
 
@@ -64,6 +65,7 @@ class RelationType(enum.StrEnum):
     ENTITY_ATTRIBUTE = "entity_attr"  # Fact asserts attribute of an entity
     CONTRADICTS = "contradicts"  # Memory A contradicts Memory B
     DEPENDS_ON = "depends_on"  # Skill or action requires prerequisite memory
+    DERIVED_FROM = "derived_from"  # Memory derived/consolidated from ancestor
     ASSOCIATED_WITH = "associated_with"  # General thematic/associative link
 
 
@@ -77,6 +79,9 @@ class MemoryEventType(enum.StrEnum):
     DECAYED = "memory.decayed"
     CONSOLIDATED = "memory.consolidated"
     SUPERSEDED = "memory.superseded"
+    ARCHIVED = "memory.archived"
+    RESTORED = "memory.restored"
+    EXPIRED = "memory.expired"
     TOMBSTONED = "memory.tombstoned"
     PURGED = "memory.purged"
 

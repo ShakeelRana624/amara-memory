@@ -4,7 +4,10 @@ from __future__ import annotations
 
 from amara.intelligence.candidate_generator import MemoryCandidateGenerator
 from amara.intelligence.classifier import MemoryClassifier
-from amara.intelligence.contradiction import ContradictionDetector
+from amara.intelligence.contradiction import (
+    ContradictionCheckResult,
+    ContradictionDetector,
+)
 from amara.intelligence.deduplication import DeduplicationEngine
 from amara.intelligence.normalizer import InputNormalizer
 from amara.intelligence.pipeline import MemoryIngestionPipeline
@@ -35,6 +38,7 @@ from amara.intelligence.types import (
 
 __all__ = [
     "ContradictionCandidate",
+    "ContradictionCheckResult",
     "ContradictionDetector",
     "DeduplicationEngine",
     "DeduplicationResult",

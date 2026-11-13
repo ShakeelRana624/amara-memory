@@ -123,3 +123,39 @@ class ExtractionError(IntelligenceError):
 
 class ContradictionError(IntelligenceError):
     """Raised when an unresolvable contradiction prevents memory mutation."""
+
+
+class LifecycleError(CognitiveMemoryError):
+    """Base exception for lifecycle operations, policies, and transitions."""
+
+
+class RetentionLockError(LifecycleError):
+    """Raised when an operation is prohibited due to an active retention lock."""
+
+    def __init__(self, memory_id: UUID | str, action: str) -> None:
+        self.memory_id = str(memory_id)
+        self.action = action
+        super().__init__(
+            f"Cannot execute '{action}' on memory '{self.memory_id}': "
+            "record is protected by a retention lock."
+        )
+
+
+class ConsolidationError(LifecycleError):
+    """Raised when memory consolidation synthesis or clustering fails."""
+
+
+class ContextReconstructionError(CognitiveMemoryError):
+    """Base exception for context reconstruction and prompt assembly failures."""
+
+
+class TokenBudgetExceededError(ContextReconstructionError):
+    """Raised when the required context exceeds the allocated token budget."""
+
+    def __init__(self, required_tokens: int, max_budget: int) -> None:
+        self.required_tokens = required_tokens
+        self.max_budget = max_budget
+        super().__init__(
+            f"Required token count ({required_tokens}) exceeds maximum context "
+            f"token budget ({max_budget})."
+        )

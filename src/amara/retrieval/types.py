@@ -116,11 +116,18 @@ class MemorySearchResult(BaseModel):
     content: str
     normalized_content: str
     source_id: str
+    author_id: str = "unknown"
     timestamp: datetime.datetime
     confidence: float = Field(
         ge=0.0,
         le=1.0,
         description="Epistemic certainty/factual confidence of the memory record.",
+    )
+    importance: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        description="Cognitive salience/importance of the memory record.",
     )
     relevance_score: float = Field(
         ge=0.0,
