@@ -23,8 +23,8 @@ We use `uv` as our primary environment and dependency manager.
 1. **Prerequisites**: Ensure Python 3.12+ and `uv` are installed.
 2. **Clone & Environment**:
    ```bash
-   git clone https://github.com/amara-ai/amara.git
-   cd amara
+   git clone https://github.com/ShakeelRana624/amara-memory.git
+   cd amara-memory
    uv venv
    ```
 3. **Activate Environment**:
