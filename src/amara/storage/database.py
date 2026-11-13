@@ -44,6 +44,11 @@ class DatabaseManager:
         self._session_factory: async_sessionmaker[AsyncSession] | None = None
 
     @property
+    def is_healthy(self) -> bool:
+        """Return True if connection pool has been initialized."""
+        return self._engine is not None
+
+    @property
     def engine(self) -> AsyncEngine:
         """Return the active AsyncEngine, raising error if not initialized."""
         if self._engine is None:

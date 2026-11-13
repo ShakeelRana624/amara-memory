@@ -8,6 +8,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Phase 7: Public Python SDK and REST API**:
+  - **Asynchronous Public Python SDK (`MemoryEngine`)**:
+    - High-level async facade orchestrating ingestion, hybrid recall, updates, deletion, archival, restoration, consolidation, prompt context reconstruction, provenance inspection, and tenant usage metrics.
+    - Decoupled public response representations (`MemoryItem`, `RecallItem`, `RecallResponse`, `InspectionResult`, `EngineStats`) preventing internal ORM/storage leakage.
+    - Context manager support (`async with MemoryEngine(...) as engine:`) guaranteeing graceful connection teardown and cleanup.
+  - **Thread-Isolated Synchronous Adapter (`SyncMemoryEngine`)**:
+    - Dedicated background worker thread (`AMARA-SyncWorker`) with an isolated `asyncio` event loop.
+    - Thread-safe dispatch of all cognitive memory operations (`remember`, `recall`, `update`, `forget`, `archive`, `restore`, `consolidate`, `reconstruct`, `inspect`, `stats`) preventing event loop deadlocks in synchronous WSGI, CLI, and Jupyter environments.
+  - **Comprehensive Configuration Engine (`MemoryConfig`)**:
+    - Unified configuration model supporting PostgreSQL pool sizing (`db_pool_size`, `db_max_overflow`), decay half-life, token budgets, and automated discovery from environment variables (`MemoryConfig.from_env()`).
+  - **FastAPI REST API Engine (`create_app`)**:
+    - Versioned endpoints under `/api/v1` for memories, context reconstruction, consolidation, usage metrics, health diagnostics, and API keys.
+    - Full OpenAPI 3.1 and Swagger/ReDoc interactive documentation generation (`/docs`, `/redoc`, `/openapi.json`).
+  - **Cryptographic Authentication & Scope Authorization (`APIKeyStore`)**:
+    - Structured prefix format (`amara_live_<prefix>_<secret>`) with single-exposure raw secret guarantee.
+    - Constant-time SHA-256 verification (`hmac.compare_digest`).
+    - Granular permission scope enforcement (`read`, `write`, `admin`).
+    - Instant key revocation and zero-downtime key secret rotation (`rotate_key`).
+    - Strict tenant isolation: Cross-tenant access attempts are strictly rejected with 403 Forbidden or 404 Not Found.
+  - **Enterprise Middleware & Safeguards**:
+    - `RequestIDMiddleware`: Generates or propagates unique `X-Request-ID` across all requests and responses.
+    - `RequestSizeLimitMiddleware`: Rejects oversized payloads exceeding configured limits with HTTP 413 Payload Too Large.
+    - `RateLimitMiddleware`: Sliding-window rate limiting per API key or client IP returning HTTP 429 Too Many Requests with standard `Retry-After` backoff headers.
+  - **Runnable Developer Examples & Verification**:
+    - `examples/sdk_quickstart.py`: Async SDK walkthrough demonstrating ingestion, recall, update, inspection, context reconstruction, and stats.
+    - `examples/rest_client_demo.py`: In-process HTTP client walkthrough exercising health probes, API key provisioning, hybrid search, context reconstruction, usage telemetry, and deletion.
+  - **Integration & Unit Test Suite**:
+    - 201 total passing tests across Phases 0–7 covering async SDK, synchronous adapter, API authentication, FastAPI endpoints, middleware safeguards, cross-tenant isolation, and real PostgreSQL 16 + pgvector concurrent persistence.
 - **Phase 6: Adaptive Lifecycle and Context Reconstruction**:
   - The Seven Lifecycle Operations: `retain`, `update`, `consolidate`, `archive`, `restore`, `expire`, and `delete` orchestrated via `MemoryLifecycleManager`.
   - Multi-attribute `MemoryPolicyManager`: Evaluates exponential recency decay ($T_{1/2}$ half-life), logistic retrieval utility scoring, access frequency saturation, and intrinsic importance while maintaining strict separation between importance, reliability (epistemic confidence), and retrieval relevance.
