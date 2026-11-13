@@ -1,4 +1,4 @@
-name: CI
+name: CI & Quality Gate
 
 on:
   push:
@@ -35,17 +35,54 @@ jobs:
       - name: Ruff Format Check
         run: ruff format --check .
 
-      - name: Mypy Type Check
+      - name: Mypy Strict Type Check
         run: mypy src tests
+
+  security-scan:
+    name: Dependency Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install pip-audit
+        run: uv pip install --system pip-audit
+
+      - name: Run Dependency Vulnerability Audit
+        run: pip-audit
 
   test:
     name: Test (Python ${{ matrix.python-version }} on ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    needs: [lint-and-typecheck]
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
         python-version: ["3.12", "3.13"]
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: amara
+          POSTGRES_PASSWORD: amara
+          POSTGRES_DB: amara_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout repository
@@ -63,5 +100,33 @@ jobs:
         run: uv pip install --system -e ".[dev]"
 
       - name: Run Test Suite
-        run: pytest
+        env:
+          AMARA_DATABASE_URL: postgresql+asyncpg://amara:amara@127.0.0.1:5432/amara_test
+        run: pytest -v --cov=amara
 
+  build-verification:
+    name: Docker Build Verification
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, security-scan]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Verify API Container Build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: deploy/docker/Dockerfile.api
+          push: false
+          tags: amara-api:ci-test
+
+      - name: Verify Worker Container Build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: deploy/docker/Dockerfile.worker
+          push: false
+          tags: amara-worker:ci-test

@@ -1,0 +1,61 @@
+# AMARA Production Caddy Ingress Configuration
+# Automatic HTTPS via Let's Encrypt / ZeroSSL, reverse proxy, and hardened security headers
+
+{
+    email admin@amara.ai
+    admin off
+}
+
+# Production API & Dashboard Domain
+{$AMARA_DOMAIN:localhost} {
+    # Encoding compression
+    encode gzip zstd
+
+    # Security Headers
+    header {
+        Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        -Server
+    }
+
+    # Proxy API requests and documentation to FastAPI backend
+    @api_paths {
+        path /api/*
+        path /docs*
+        path /openapi.json*
+        path /redoc*
+    }
+    handle @api_paths {
+        reverse_proxy api:8000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto {scheme}
+
+            # Health check upstream monitoring
+            health_uri /api/v1/health
+            health_interval 15s
+            health_timeout 3s
+        }
+    }
+
+    # Proxy frontend application requests to Next.js dashboard
+    handle {
+        reverse_proxy dashboard:3000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto {scheme}
+        }
+    }
+
+    # Structured JSON access logging
+    log {
+        output stdout
+        format json
+        level INFO
+    }
+}

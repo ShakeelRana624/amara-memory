@@ -1,0 +1,115 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: amara-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-amara}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-amara_secure_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-amara_prod}
+    volumes:
+      - amara-pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-amara} -d ${POSTGRES_DB:-amara_prod}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2048M
+
+  api:
+    build:
+      context: .
+      dockerfile: deploy/docker/Dockerfile.api
+    container_name: amara-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      AMARA_ENV: ${AMARA_ENV:-production}
+      AMARA_STORAGE_BACKEND: postgres
+      AMARA_DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-amara}:${POSTGRES_PASSWORD:-amara_secure_dev_password}@postgres:5432/${POSTGRES_DB:-amara_prod}
+      AMARA_SECRET_KEY: ${AMARA_SECRET_KEY:-default_secret_key_change_in_production}
+      PORT: 8000
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 1536M
+
+  worker:
+    build:
+      context: .
+      dockerfile: deploy/docker/Dockerfile.worker
+    container_name: amara-worker
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      AMARA_ENV: ${AMARA_ENV:-production}
+      AMARA_STORAGE_BACKEND: postgres
+      AMARA_DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-amara}:${POSTGRES_PASSWORD:-amara_secure_dev_password}@postgres:5432/${POSTGRES_DB:-amara_prod}
+      AMARA_WORKER_INTERVAL: "60"
+      AMARA_WORKER_TENANTS: "default,production"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1024M
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: deploy/docker/Dockerfile.dashboard
+    container_name: amara-dashboard
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      NEXT_PUBLIC_AMARA_API_URL: http://api:8000
+    ports:
+      - "3000:3000"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1024M
+
+  gateway:
+    image: caddy:2-alpine
+    container_name: amara-gateway
+    restart: unless-stopped
+    depends_on:
+      - api
+      - dashboard
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      AMARA_DOMAIN: ${AMARA_DOMAIN:-localhost}
+    volumes:
+      - ./deploy/ingress/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - amara-caddy-data:/data
+      - amara-caddy-config:/config
+
+volumes:
+  amara-pgdata:
+  amara-caddy-data:
+  amara-caddy-config:

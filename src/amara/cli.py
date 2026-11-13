@@ -1,22 +1,24 @@
 """AMARA Command-Line Interface (CLI).
 
 Provides commands for starting the API server, managing API keys,
-running database migrations, and executing cognitive benchmarks.
+running database migrations, executing background workers, and running benchmarks.
 """
 
 from __future__ import annotations
 
+import asyncio
 import os
-from pathlib import Path
 import subprocess
 import sys
+from pathlib import Path
 
-from alembic import command as alembic_command
-from alembic.config import Config as AlembicConfig
 import click
 import uvicorn
+from alembic import command as alembic_command
+from alembic.config import Config as AlembicConfig
 
 from amara.server.auth import APIKeyStore
+from amara.worker import run_worker_main
 
 
 @click.group()
@@ -50,6 +52,35 @@ def serve_command(host: str, port: int, reload: bool, workers: int, storage: str
         reload=reload,
         workers=workers if not reload else 1,
         factory=True,
+    )
+
+
+@cli.command("worker")
+@click.option("--interval", default=60.0, type=float, help="Seconds between maintenance cycles.")
+@click.option(
+    "--storage",
+    type=click.Choice(["memory", "postgres"]),
+    default="postgres",
+    help="Storage backend implementation.",
+)
+@click.option(
+    "--tenants",
+    default="default,production",
+    help="Comma-separated tenant IDs to process.",
+)
+def worker_command(interval: float, storage: str, tenants: str) -> None:
+    """Launch the AMARA background cognitive lifecycle worker."""
+    tenant_list = [t.strip() for t in tenants.split(",") if t.strip()]
+    click.echo(
+        f"Starting AMARA Worker (interval: {interval}s, storage: {storage}, "
+        f"tenants: {tenant_list})..."
+    )
+    asyncio.run(
+        run_worker_main(
+            interval=interval,
+            storage=storage,
+            tenants=tenant_list,
+        )
     )
 
 

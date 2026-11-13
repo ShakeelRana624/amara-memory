@@ -1,0 +1,60 @@
+# Production Dockerfile for AMARA Cognitive Background Worker
+FROM python:3.12-slim AS builder
+
+WORKDIR /build
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=ghcr.io/astral-sh/uv:0.5.21 /uv /uvx /bin/
+
+COPY pyproject.toml uv.lock ./
+COPY src/ ./src/
+COPY README.md LICENSE ./
+
+RUN uv build --wheel --out-dir /build/dist
+
+# ----------------------------------------------------------------------------
+# Runtime Stage
+# ----------------------------------------------------------------------------
+FROM python:3.12-slim AS runtime
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    libpq5 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=ghcr.io/astral-sh/uv:0.5.21 /uv /uvx /bin/
+COPY --from=builder /build/dist/*.whl /tmp/
+
+RUN uv pip install --system /tmp/*.whl && rm -rf /tmp/*.whl
+
+COPY alembic.ini ./
+COPY migrations/ ./migrations/
+COPY deploy/scripts/entrypoint-worker.sh /usr/local/bin/entrypoint-worker.sh
+RUN chmod +x /usr/local/bin/entrypoint-worker.sh
+
+RUN groupadd -g 10001 amara && \
+    useradd -u 10001 -g amara -s /bin/bash -m amara && \
+    mkdir -p /app/data /tmp/amara && \
+    chown -R amara:amara /app /tmp/amara
+
+USER amara
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    AMARA_STORAGE_BACKEND=postgres \
+    AMARA_ENV=production \
+    AMARA_WORKER_HEARTBEAT=/tmp/amara/worker-heartbeat
+
+# Worker liveness check: verifies heartbeat timestamp within last 120 seconds
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+    CMD test -f /tmp/amara/worker-heartbeat || exit 1
+
+ENTRYPOINT ["/usr/local/bin/entrypoint-worker.sh"]
+CMD ["worker", "--interval", "60", "--storage", "postgres"]

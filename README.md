@@ -238,6 +238,7 @@ AMARA includes a modern, responsive web dashboard located in `dashboard/`, engin
 - **Provenance & Inspection View**: Inspect extracted subject-predicate-object facts, named entities, salience history, and source origin.
 - **Relationship Knowledge Graph**: Interactive visual exploration of associative memory edges and entity relationships.
 - **Retrieval Playground**: Test queries live, compare hybrid vs. semantic vs. lexical retrieval strategies, and evaluate latency.
+- **AI Framework Integrations Hub**: Interactive code sandboxes for LangGraph, Hugging Face Transformers, FastAPI, and Generic Agents.
 - **API Key Management**: Generate scoped keys, rotate keys zero-downtime, and inspect access logs.
 - **Telemetry & Usage Analytics**: Live charts tracking token savings, cache hit ratios, and API latency percentiles.
 
@@ -249,6 +250,35 @@ npm install
 npm run dev
 # Open http://localhost:3000 in your browser
 ```
+
+---
+
+## Production Docker Deployment
+
+AMARA includes production-ready Dockerfiles, multi-service orchestration (`docker-compose.yml`), automated database migrations, and Caddy ingress with automatic HTTPS:
+
+```bash
+# 1. Clone and enter directory
+git clone https://github.com/ShakeelRana624/amara-memory.git
+cd amara-memory
+
+# 2. Configure production secrets
+cp deploy/environments/production.env.example .env
+# Edit .env with your PostgreSQL credentials and domain
+
+# 3. Launch full stack with Docker Compose
+docker compose up -d
+
+# Verify running services:
+# - PostgreSQL 16 + pgvector (port 5432)
+# - FastAPI REST API server (port 8000)
+# - Cognitive Background Worker (daemon)
+# - Next.js Developer Dashboard (port 3000)
+# - Caddy Ingress Gateway with Automatic TLS (ports 80 & 443)
+docker compose ps
+```
+
+For advanced production clustering, disaster recovery runbooks, and Kubernetes manifests, see [docs/deployment/](docs/deployment/) and [DEPLOYMENT_REPORT.md](DEPLOYMENT_REPORT.md).
 
 ---
 
@@ -329,6 +359,7 @@ The codebase has undergone a complete 10-phase engineering audit and automated s
 - **Zero Vulnerabilities**: Verified safe handling of SQL injection, prompt injection mitigation, cryptographic API key hashing, and verified deletion propagation.
 
 Refer to the release audit documentation for full certificates:
+- [DEPLOYMENT_REPORT.md](DEPLOYMENT_REPORT.md) — Production deployment audit, load test benchmarks, and infrastructure readiness.
 - [SECURITY_AUDIT.md](SECURITY_AUDIT.md) — Security penetration audit, isolation guarantees, and threat analysis.
 - [TEST_REPORT.md](TEST_REPORT.md) — Exhaustive test matrix and category verification.
 - [KNOWN_LIMITATIONS.md](KNOWN_LIMITATIONS.md) — Architectural trade-offs, operational boundaries, and documented limits.
