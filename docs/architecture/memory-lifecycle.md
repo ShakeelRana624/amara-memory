@@ -116,3 +116,4 @@ stateDiagram-v2
 | **DECAYING / CONSOLIDATED** | Inactivity Threshold Reached | Elapsed time $> \tau_{archive}$, $U \le 0$ | `ARCHIVED` | Drop from active HNSW index; retain in cold storage |
 | **ANY (except PURGED)** | User Delete Request | Authorized tenant caller | `TOMBSTONED` | Set `deleted_at = UTC`; drop from all standard search indexes |
 | **TOMBSTONED** | GDPR Purge Window Expired | Compliance retention schedule | `PURGED` | Physical row deletion (`DELETE FROM memory_records`); cascade lineage |
+

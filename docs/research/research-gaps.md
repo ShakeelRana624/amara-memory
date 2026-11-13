@@ -117,3 +117,4 @@ This document identifies and formalizes seven critical research and architectura
 | **G5** | Crude Memory Lifecycle | Binary keep/truncate or naive linear scan | ACT-R / Ebbinghaus cognitive retention curve with retrieval utility reinforcement | Token efficiency & retention curve benchmark |
 | **G6** | Enterprise Insecurity & Non-compliance | Plain metadata filters; no deletion cascade | PostgreSQL Row-Level Security (RLS) + Automated GDPR cascading purge | Zero cross-tenant leakage; complete cascade audit |
 | **G7** | Vendor & Framework Lock-in | Hardcoded dependencies on OpenAI / FastAPI | Zero-dependency core with abstract `Protocol` provider adapters | Clean execution against local open-weights models |
+

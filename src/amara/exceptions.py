@@ -7,9 +7,16 @@ MemoryError is never shadowed.
 
 from __future__ import annotations
 
+from typing import Any
+from uuid import UUID
+
 
 class AmaraError(Exception):
     """Base exception for all AMARA errors."""
+
+
+class ConfigurationError(AmaraError):
+    """Raised when configuration validation or environment loading fails."""
 
 
 class CognitiveMemoryError(AmaraError):
@@ -19,17 +26,58 @@ class CognitiveMemoryError(AmaraError):
 class MemoryNotFoundError(CognitiveMemoryError):
     """Raised when a requested memory record or entity cannot be found."""
 
-    def __init__(self, memory_id: str, message: str | None = None) -> None:
-        self.memory_id = memory_id
-        super().__init__(message or f"Memory record with ID '{memory_id}' not found.")
+    def __init__(self, memory_id: UUID | str, tenant_id: str | None = None) -> None:
+        self.memory_id = str(memory_id)
+        self.tenant_id = tenant_id
+        msg = f"Memory record with ID '{self.memory_id}' not found"
+        if tenant_id:
+            msg += f" in tenant '{tenant_id}'"
+        super().__init__(f"{msg}.")
 
 
 class DuplicateMemoryError(CognitiveMemoryError):
     """Raised when attempting to insert a memory record with an existing ID."""
 
-    def __init__(self, memory_id: str, message: str | None = None) -> None:
-        self.memory_id = memory_id
-        super().__init__(message or f"Memory record with ID '{memory_id}' already exists.")
+    def __init__(self, memory_id: UUID | str, tenant_id: str | None = None) -> None:
+        self.memory_id = str(memory_id)
+        self.tenant_id = tenant_id
+        msg = f"Memory record with ID '{self.memory_id}' already exists"
+        if tenant_id:
+            msg += f" in tenant '{tenant_id}'"
+        super().__init__(f"{msg}.")
+
+
+class InvalidMemoryStateError(CognitiveMemoryError):
+    """Raised when an illegal lifecycle state transition is attempted."""
+
+    def __init__(self, current_state: str, attempted_state: str, reason: str | None = None) -> None:
+        self.current_state = current_state
+        self.attempted_state = attempted_state
+        msg = f"Illegal transition from state '{current_state}' to '{attempted_state}'"
+        if reason:
+            msg += f": {reason}"
+        super().__init__(f"{msg}.")
+
+
+class MemoryValidationError(CognitiveMemoryError):
+    """Raised when domain data validation rules are violated."""
+
+    def __init__(self, field_name: str, message: str, value: Any = None) -> None:
+        self.field_name = field_name
+        self.value = value
+        super().__init__(f"Validation failed for '{field_name}': {message}")
+
+
+class TenantIsolationError(CognitiveMemoryError):
+    """Raised when cross-tenant data access or tenant ID mismatch is detected."""
+
+    def __init__(self, requested_tenant: str, target_tenant: str) -> None:
+        self.requested_tenant = requested_tenant
+        self.target_tenant = target_tenant
+        super().__init__(
+            f"Cross-tenant access prohibited: requested tenant '{requested_tenant}' "
+            f"does not match record tenant '{target_tenant}'."
+        )
 
 
 class StorageError(AmaraError):
@@ -50,5 +98,5 @@ class StorageCapacityExceededError(StorageError):
         super().__init__(message or f"Storage capacity exceeded: {detail}")
 
 
-class RetrievalError(AmaraError):
-    """Raised when memory retrieval, ranking, or indexing operations fail."""
+class RepositoryError(StorageError):
+    """Raised when a repository query or transactional execution fails."""

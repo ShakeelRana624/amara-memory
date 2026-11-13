@@ -151,3 +151,4 @@ When a purge request is issued for a user or source record $m_{root}$:
    - If a derived node is supported by multiple independent parents ($m_{root}$ and $m_{other}$), $m_{root}$ is removed from the lineage set, and the node's confidence score is discounted proportionally.
 3. **Index Cleanup**: Corresponding vector embeddings are immediately dropped from `pgvector` HNSW indexes.
 4. **Cryptographic Proof of Erasure**: A signed certificate of erasure recording the count of purged records and hashes is generated for regulatory compliance.
+

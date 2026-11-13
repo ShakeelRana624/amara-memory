@@ -115,3 +115,4 @@ The development of AMARA is guided by a formal empirical research agenda designe
 1. **Model Bias in Evaluation**: Evaluating memory systems using LLM-as-a-judge (e.g., GPT-4 judge) introduces systematic evaluation biases. AMARA mitigates this by relying on exact-match factual benchmarks, ground-truth entity tracking, and human-verified datasets (LoCoMo, LongMemEval).
 2. **Computational Overhead of Extraction**: Automated extraction and consolidation consume LLM inference tokens. In initial releases, extraction is optional or asynchronous to prevent blocking user-facing agent loops.
 3. **Database Scalability Bounds**: While PostgreSQL + pgvector provides exceptional relational and vector capabilities up to millions of records, hyperscale distributed deployments ($>10^8$ records) will eventually require specialized distributed indexing tiers (planned for future SaaS architecture).
+

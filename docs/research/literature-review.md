@@ -167,3 +167,4 @@ The literature review firmly dictates five non-negotiable architectural mandates
 3. **Decoupled Provider Architecture**: Unlike MemGPT and Mem0, AMARA's core engine must have zero hard dependencies on external LLM vendors. Model interactions (extraction, summarization, embedding, reranking) must be abstracted behind swappable protocols.
 4. **Structured Cognitive Decay**: Moving beyond the crude binary choices of "keep forever" or "hard context clipping", AMARA must implement continuous cognitive decay informed by access utility and reinforcement.
 5. **Robust Deletion and Provenance Integrity**: Enterprise adoption requires strict tenant isolation, audit trails, and deterministic deletion cascades (GDPR Right-to-be-Forgotten) across derived semantic and episodic graphs.
+
