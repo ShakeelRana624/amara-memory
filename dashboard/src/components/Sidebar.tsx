@@ -12,6 +12,7 @@ import {
   KeyIcon,
   LayersIcon,
   NetworkIcon,
+  PlugIcon,
   SearchIcon,
   SettingsIcon,
 } from "./icons";
@@ -29,6 +30,7 @@ const navItems: NavItem[] = [
   { name: "Memory Explorer", href: "/dashboard/memories", icon: BrainIcon },
   { name: "Relationships", href: "/dashboard/relationships", icon: NetworkIcon },
   { name: "Retrieval Playground", href: "/dashboard/retrieval", icon: SearchIcon },
+  { name: "Integrations", href: "/dashboard/integrations", icon: PlugIcon, badge: "AI" },
   { name: "API Keys", href: "/dashboard/keys", icon: KeyIcon },
   { name: "Usage & Metrics", href: "/dashboard/usage", icon: LayersIcon },
   { name: "Settings", href: "/dashboard/settings", icon: SettingsIcon },

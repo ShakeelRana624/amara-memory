@@ -7,6 +7,9 @@ import {
   CopyIcon,
   CheckIcon,
   BrainIcon,
+  PlugIcon,
+  CpuIcon,
+  SparklesIcon,
 } from "../../../components/icons";
 import { useToast } from "../../../components/Toast";
 
@@ -137,6 +140,61 @@ if __name__ == "__main__":
         <pre className="p-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-950 text-indigo-300 font-mono text-xs overflow-x-auto leading-relaxed">
           <code>{pythonQuickstart}</code>
         </pre>
+      </section>
+
+      {/* AI Framework Integrations Overview */}
+      <section className="p-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <PlugIcon className="w-5 h-5 text-indigo-500" />
+            <h2 className="text-sm font-bold font-mono uppercase tracking-wider text-slate-900 dark:text-slate-100">
+              AI Framework Integrations (LangGraph & Hugging Face)
+            </h2>
+          </div>
+          <a
+            href="/dashboard/integrations"
+            className="text-xs font-mono text-indigo-500 hover:text-indigo-400 font-semibold"
+          >
+            Explore Integrations Hub &rarr;
+          </a>
+        </div>
+        <p className="text-xs text-slate-600 dark:text-slate-400 font-sans leading-relaxed">
+          AMARA provides decoupled adapters for <strong>LangGraph</strong> (pre-decision retrieval and post-decision reflection), <strong>Hugging Face Transformers</strong> (pre-generation prompt augmentation without GPU interference), and <strong>FastAPI microservices</strong>.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div className="p-4 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 space-y-2">
+            <h3 className="text-xs font-bold font-mono text-indigo-400 flex items-center gap-1.5">
+              <CpuIcon className="w-4 h-4 text-indigo-500" />
+              LangGraph Reusable Node
+            </h3>
+            <pre className="p-2.5 rounded bg-slate-950 text-[11px] font-mono text-indigo-300 overflow-x-auto">
+              <code>{`from amara.integrations.langgraph import AmaraMemoryNode, AmaraLangGraphAdapter
+
+adapter = AmaraLangGraphAdapter(engine=engine)
+# Injects memory into state before LLM
+recall_node = AmaraMemoryNode(adapter=adapter, mode="retrieve")
+# Extracts facts from state after LLM
+reflect_node = AmaraMemoryNode(adapter=adapter, mode="reflect")`}</code>
+            </pre>
+          </div>
+
+          <div className="p-4 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 space-y-2">
+            <h3 className="text-xs font-bold font-mono text-emerald-400 flex items-center gap-1.5">
+              <SparklesIcon className="w-4 h-4 text-emerald-500" />
+              Hugging Face Prompt Augmenter
+            </h3>
+            <pre className="p-2.5 rounded bg-slate-950 text-[11px] font-mono text-emerald-300 overflow-x-auto">
+              <code>{`from amara.integrations.transformers import AmaraTransformersAugmenter
+
+augmenter = AmaraTransformersAugmenter(engine=engine, max_context_tokens=600)
+prompt = await augmenter.augment_prompt(
+    user_query="How do I deploy Postgres?",
+    system_prompt="You are a DevOps assistant."
+)`}</code>
+            </pre>
+          </div>
+        </div>
       </section>
 
       {/* REST API Endpoints Reference */}

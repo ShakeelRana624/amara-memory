@@ -7,14 +7,14 @@ running database migrations, and executing cognitive benchmarks.
 from __future__ import annotations
 
 import os
+from pathlib import Path
 import subprocess
 import sys
-from pathlib import Path
 
-import click
-import uvicorn
 from alembic import command as alembic_command
 from alembic.config import Config as AlembicConfig
+import click
+import uvicorn
 
 from amara.server.auth import APIKeyStore
 
