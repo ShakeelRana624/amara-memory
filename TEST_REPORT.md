@@ -119,3 +119,4 @@ tests/test_rest_api.py ................                                  [100%]
 ## 4. Test Conclusion
 
 The test suite confirms that AMARA v0.1.0 fulfills all architectural, performance, and security specifications with zero regressions.
+

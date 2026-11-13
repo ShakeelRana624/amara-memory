@@ -8,9 +8,9 @@ version = "0.1.0.dev0"
 description = "AMARA: Adaptive Memory Architecture for Reasoning and AI"
 readme = "README.md"
 requires-python = ">=3.12"
-license = { text = "MIT" }
+license = { text = "Proprietary" }
 authors = [
-    { name = "AMARA Contributors" }
+    { name = "AMARA" }
 ]
 keywords = [
     "memory",
@@ -20,10 +20,10 @@ keywords = [
     "context-management",
 ]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
+    "License :: Other/Proprietary License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",

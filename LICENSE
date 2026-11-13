@@ -1,22 +1,53 @@
-MIT License
+PROPRIETARY COMMERCIAL SOFTWARE LICENSE
+ALL RIGHTS RESERVED
 
-Copyright (c) 2026 AMARA Contributors
+Copyright (c) 2026 AMARA. All Rights Reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+NOTICE TO ALL USERS:
+This software and associated documentation files (the "Software") are proprietary, 
+confidential, and trade-secret products of AMARA ("Licensor" / "Owner"). 
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+THIS SOFTWARE IS NOT OPEN-SOURCE AND IS NOT FREE SOFTWARE.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+1. OWNERSHIP AND INTELLECTUAL PROPERTY
+The Software, including its source code, architecture, algorithms, user interfaces, 
+documentation, and database schemas, is the exclusive intellectual property of the 
+Owner and is protected by international copyright laws, trademark laws, patent laws, 
+and trade secret protections. No title or ownership rights to the Software are 
+transferred under any circumstances.
 
+2. RESTRICTIONS ON USE, DISTRIBUTION, AND SALE
+Unless expressly authorized under a separate, signed, written Commercial License 
+Agreement executed with the Owner, you are STRICTLY PROHIBITED from:
+   a. Selling, licensing, sublicensing, renting, leasing, distributing, or transferring 
+      the Software or any portion thereof to any third party for commercial or non-commercial purposes.
+   b. Using the Software to provide commercial SaaS (Software-as-a-Service), hosted services, 
+      API services, or managed memory platforms to third parties.
+   c. Modifying, adapting, translating, creating derivative works based upon, decompiling, 
+      reverse engineering, disassembling, or attempting to derive the source code of any 
+      compiled or proprietary components.
+   d. Removing, altering, or obscuring any proprietary notices, copyright markings, 
+      confidentiality legends, or attribution headers from the Software.
+   e. Using the Software, its architecture, or its benchmarks to build or train a competing 
+      commercial product or service.
+
+3. COMMERCIAL LICENSING & INQUIRIES
+To purchase a commercial enterprise license, cloud deployment permit, or SaaS partnership, 
+contact the Licensor directly at:
+   Email: commercial@amara.ai (or sales / licensing department)
+   Website: https://amara.ai
+
+4. TERMINATION AND REMEDIES
+Any unauthorized copy, reproduction, modification, distribution, or commercial exploitation 
+of this Software constitutes willful infringement of intellectual property and will immediately 
+and automatically terminate any implied or explicit permissions. The Owner reserves all rights 
+to seek injunctive relief, statutory damages, and criminal prosecution under all applicable 
+jurisdictions.
+
+5. DISCLAIMER OF WARRANTIES
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT OWNER BE LIABLE FOR ANY 
+CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, 
+ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+THE SOFTWARE.

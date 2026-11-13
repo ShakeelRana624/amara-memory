@@ -5,7 +5,7 @@ Status: Accepted
 
 ## Context
 
-AMARA is an evolving framework designed for both open-source adoption and future cloud SaaS capabilities. To maintain architectural integrity across contributors and time, we need a transparent, durable, and version-controlled record of technical decisions, trade-offs, and design rationales.
+AMARA is an evolving framework designed for enterprise product adoption and cloud SaaS capabilities. To maintain architectural integrity across contributors and time, we need a transparent, durable, and version-controlled record of technical decisions, trade-offs, and design rationales.
 
 ## Decision
 

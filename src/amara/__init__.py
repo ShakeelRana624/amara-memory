@@ -1,7 +1,7 @@
 """AMARA: Adaptive Memory Architecture for Reasoning and AI.
 
-An open-source, model-agnostic cognitive memory framework designed for autonomous
-reasoning agents and multi-agent workflows.
+A proprietary, model-agnostic cognitive memory framework and AI infrastructure product
+designed for autonomous reasoning agents and multi-agent workflows.
 """
 
 from __future__ import annotations

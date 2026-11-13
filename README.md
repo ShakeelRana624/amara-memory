@@ -1,6 +1,6 @@
 # AMARA: Adaptive Memory Architecture for Reasoning and AI
 
-AMARA is an open-source, model-agnostic cognitive memory framework engineered to empower artificial intelligence systems and autonomous agents with structured, persistent, and adaptive cognitive context.
+AMARA is a proprietary, model-agnostic cognitive memory framework and enterprise AI infrastructure product engineered to empower artificial intelligence systems and autonomous agents with structured, persistent, and adaptive cognitive context.
 
 > **Project Phase**: Phase 10 — Quality Assurance, Security and Research Evaluation  
 > **Status**: Comprehensive security audit, penetration testing, concurrency stress testing, empirical research evaluation (LongMemEval, LoCoMo, ablations), and release gate documentation (`SECURITY_AUDIT.md`, `TEST_REPORT.md`, `BENCHMARK_REPORT.md`, `KNOWN_LIMITATIONS.md`) fully completed and verified with 233 passing tests.
@@ -88,13 +88,15 @@ AMARA enforces high engineering standards:
 
 ---
 
-## Contributing
+## Commercial Licensing & Inquiries
 
-We welcome community contributions. Please review [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md) before submitting pull requests or issue reports.
+AMARA is proprietary commercial software. All rights reserved. For commercial enterprise licensing, custom deployments, or partnership inquiries, contact:
+- **Commercial Licensing**: [commercial@amara.ai](mailto:commercial@amara.ai)
+- **Website**: [https://amara.ai](https://amara.ai)
 
 ---
 
 ## License
 
-AMARA is licensed under the [MIT License](LICENSE).
+AMARA is proprietary commercial software licensed under the [Proprietary Commercial Software License](LICENSE). Unauthorized copying, modification, distribution, sublicensing, or commercial resale without a signed commercial license agreement is strictly prohibited.
 

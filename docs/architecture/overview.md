@@ -2,7 +2,7 @@
 
 ## 1. Mission and Problem Statement
 
-**AMARA** (Adaptive Memory Architecture for Reasoning and AI) is an open-source, model-agnostic cognitive memory framework designed to provide autonomous AI agents and reasoning systems with persistent, structured, and contextually adaptive memory.
+**AMARA** (Adaptive Memory Architecture for Reasoning and AI) is a proprietary, model-agnostic cognitive memory framework and enterprise AI product designed to provide autonomous AI agents and reasoning systems with persistent, structured, and contextually adaptive memory.
 
 Current Large Language Model (LLM) agents suffer from critical memory limitations:
 - **Stateless Execution**: Models lose state across invocation cycles.
@@ -111,7 +111,7 @@ Maintains structured workflows, tool definitions, successful operational traject
 
 ## 6. Path Toward SaaS Platform
 
-While the open-source AMARA core is self-contained and operates entirely locally, its protocol-driven architecture is deliberately designed to allow seamless migration to a hosted AMARA SaaS platform:
+While the core AMARA software engine is self-contained and operates on-premises or in private cloud VPCs, its protocol-driven architecture is deliberately designed to allow seamless deployment as a managed commercial SaaS platform:
 - Storage protocols can map to gRPC / REST API cloud endpoints.
 - Synchronization managers will handle offline-local to cloud replication.
 - Multi-agent shared memory spaces will be managed via cloud-native access control.

@@ -78,4 +78,5 @@ A dedicated security test suite ([`tests/test_security_audit.py`](file:///c:/Use
 
 ## 6. Sign-Off Verdict
 
-All security tests passed with zero unresolved critical, high, or medium severity vulnerabilities. AMARA v0.1.0 is **APPROVED** for public open-source release and hosted developer deployment.
+All security tests passed with zero unresolved critical, high, or medium severity vulnerabilities. AMARA v0.1.0 is **APPROVED** for commercial product release and enterprise deployment.
+

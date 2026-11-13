@@ -60,3 +60,4 @@ The following mitigations are planned for AMARA v0.2+:
 1. **Hierarchical Graph Indexing**: Graph neural indexing for constant-time multi-hop relationship traversals.
 2. **Distributed Storage Adapters**: Native connectors for distributed vector engines and read-replica routing.
 3. **Parametric Reranker Distillation**: Lightweight local cross-encoders for microsecond reranking without LLM API overhead.
+
