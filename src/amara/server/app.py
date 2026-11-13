@@ -8,6 +8,7 @@ from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from amara.exceptions import (
@@ -88,6 +89,13 @@ def create_app(
     app.add_middleware(RequestIDMiddleware)
     app.add_middleware(RequestSizeLimitMiddleware, max_bytes=max_request_bytes)
     app.add_middleware(RateLimitMiddleware, requests_per_minute=rate_limit_per_minute)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     # -----------------------------------------------------------------------
     # Exception Handlers

@@ -36,3 +36,4 @@ async def get_usage(
         average_confidence=stats.average_confidence,
         average_importance=stats.average_importance,
     )
+

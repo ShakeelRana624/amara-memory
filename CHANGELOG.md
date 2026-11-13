@@ -8,6 +8,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Phase 8: Developer Dashboard**:
+  - **Full-Featured Modern Developer Console (Next.js 14 App Router, TypeScript, Tailwind CSS)**:
+    - Minimal, technical, modern AI infrastructure visual identity with class-based Dark and Light themes.
+    - Responsive information architecture with sidebar navigation, tenant status pills, workspace switcher, and interactive modals.
+    - Zero external icon dependencies; built high-performance, accessible native SVG component library (`dashboard/src/components/icons.tsx`).
+  - **12 Production Dashboard Pages**:
+    1. **Landing & Product Overview (`/`)**: Interactive cognitive architecture showcase, comparison table vs naive vector RAG, and copyable Python SDK quickstarts.
+    2. **Sign In (`/login`)**: API Key authentication with advanced endpoint configuration and one-click Sandbox launch.
+    3. **Tenant Registration (`/register`)**: Tenant onboarding with single-exposure Master API key generation and secure clipboard copying.
+    4. **Workspace Overview (`/dashboard`)**: KPI metric cards (Total Memories, Avg Confidence, Avg Salience, Backend probe), cognitive category breakdown, epistemic lifecycle state machine, recent memory propositions stream, and quick ingestion modal.
+    5. **Projects & Workspaces (`/dashboard/workspaces`)**: Namespace partitioning for isolating multi-agent memory pools under the same tenant.
+    6. **Memory Explorer (`/dashboard/memories`)**: Data table with real-time text search, category/status filters, pagination, inline editing, and soft tombstone / hard purge actions.
+    7. **Memory Detail & Provenance (`/dashboard/memories/[id]`)**: Full structural inspection of normalized propositions, source attribution, temporal interval validity, corroborating evidence items, and structured metadata.
+    8. **Relationship Explorer (`/dashboard/relationships`)**: Associative graph edge viewer (`CONTRADICTS`, `DERIVED_FROM`, `DEPENDS_ON`, `CAUSAL`, `ASSOCIATED_WITH`).
+    9. **Retrieval Playground (`/dashboard/retrieval`)**: Interactive testing console for hybrid, dense vector, lexical BM25, temporal recency, and relational graph search, plus token-bounded context prompt reconstruction with citations (`[REF-1]`, `[REF-2]`).
+    10. **API Key Management (`/dashboard/keys`)**: Scoped credential issuance (`read`, `write`, `admin`), key rotation, revocation, and single-exposure secret reveal modals.
+    11. **Usage & Analytics (`/dashboard/usage`)**: Category distribution bars, state machine status counts, and epistemic certainty vs cognitive importance metrics.
+    12. **Settings (`/dashboard/settings`)**: API Base URL probe test, tenant ID scope, decay half-life, default token budget, and hard purge safeguards.
+    13. **Documentation (`/dashboard/docs`)**: Interactive API reference with copyable `curl` commands and Python SDK guide.
+  - **Dual Engine Mode: Live API Integration & Sandbox Fallback**:
+    - Grounded directly in AMARA's documented REST endpoints (`/api/v1/health`, `/api/v1/memories`, `/api/v1/memories/search`, `/api/v1/context/reconstruct`, `/api/v1/memories/consolidate`, `/api/v1/usage`, `/api/v1/auth/keys`).
+    - Added CORS middleware (`CORSMiddleware`) to `create_app` in `src/amara/server/app.py` for seamless browser cross-origin requests.
+    - Clearly labeled **Sample Sandbox Mode** with rich cognitive datasets available when backend is disconnected.
+  - **End-to-End Verification**:
+    - Automated integration test `tests/test_dashboard_integration.py` exercising the full developer journey against real AMARA FastAPI server and engine.
+    - Total test suite now stands at 202 passing tests with 100% strict Mypy and Ruff verification.
 - **Phase 7: Public Python SDK and REST API**:
   - **Asynchronous Public Python SDK (`MemoryEngine`)**:
     - High-level async facade orchestrating ingestion, hybrid recall, updates, deletion, archival, restoration, consolidation, prompt context reconstruction, provenance inspection, and tenant usage metrics.

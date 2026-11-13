@@ -235,3 +235,4 @@ with SyncMemoryEngine(config=config) as engine:
     context = engine.reconstruct(query="thread loop execution", budget=400)
     print(context.formatted_context)
 ```
+
