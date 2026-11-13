@@ -1,10 +1,11 @@
 """Initial AMARA schema with pgvector, HNSW, audit history, and RLS.
 
 Revision ID: 0001_initial
-Revises: 
+Revises:
 Create Date: 2026-11-13 13:20:00.000000+00:00
 
 """
+
 from __future__ import annotations
 
 from typing import Sequence, Union
@@ -43,7 +44,12 @@ def upgrade() -> None:
         sa.Column("source_event_id", sa.String(128), nullable=True),
         sa.Column("content_hash", sa.String(64), nullable=False),
         sa.Column("extractor_signature", sa.String(128), nullable=True),
-        sa.Column("source_metadata", postgresql.JSONB(astext_type=sa.Text()), nullable=False, server_default="{}"),
+        sa.Column(
+            "source_metadata",
+            postgresql.JSONB(astext_type=sa.Text()),
+            nullable=False,
+            server_default="{}",
+        ),
         sa.Column("confidence", sa.Float(), nullable=False, server_default="1.0"),
         sa.Column("importance", sa.Float(), nullable=False, server_default="0.5"),
         sa.Column("asserted_at", sa.DateTime(timezone=True), nullable=False),
@@ -51,16 +57,29 @@ def upgrade() -> None:
         sa.Column("valid_to", sa.DateTime(timezone=True), nullable=True),
         sa.Column("version", sa.Integer(), nullable=False, server_default="1"),
         sa.Column("root_id", postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column("parent_ids", sa.ARRAY(postgresql.UUID(as_uuid=True)), nullable=False, server_default="{}"),
+        sa.Column(
+            "parent_ids",
+            sa.ARRAY(postgresql.UUID(as_uuid=True)),
+            nullable=False,
+            server_default="{}",
+        ),
         sa.Column("embedding", pgvector.sqlalchemy.Vector(1536), nullable=True),
         sa.Column("embedding_model_id", sa.String(128), nullable=True),
-        sa.Column("metadata", postgresql.JSONB(astext_type=sa.Text()), nullable=False, server_default="{}"),
-        sa.Column("evidence", postgresql.JSONB(astext_type=sa.Text()), nullable=False, server_default="[]"),
+        sa.Column(
+            "metadata", postgresql.JSONB(astext_type=sa.Text()), nullable=False, server_default="{}"
+        ),
+        sa.Column(
+            "evidence", postgresql.JSONB(astext_type=sa.Text()), nullable=False, server_default="[]"
+        ),
         sa.Column("access_count", sa.Integer(), nullable=False, server_default="0"),
         sa.Column("utility_score", sa.Float(), nullable=False, server_default="0.0"),
         sa.Column("last_accessed_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
-        sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
+        sa.Column(
+            "created_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()
+        ),
+        sa.Column(
+            "updated_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()
+        ),
         sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
     )
 
@@ -113,12 +132,20 @@ def upgrade() -> None:
         sa.Column("relation_type", sa.String(64), nullable=False),
         sa.Column("weight", sa.Float(), nullable=False, server_default="1.0"),
         sa.Column("bidirectional", sa.Boolean(), nullable=False, server_default="false"),
-        sa.Column("metadata", postgresql.JSONB(astext_type=sa.Text()), nullable=False, server_default="{}"),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
+        sa.Column(
+            "metadata", postgresql.JSONB(astext_type=sa.Text()), nullable=False, server_default="{}"
+        ),
+        sa.Column(
+            "created_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()
+        ),
     )
     op.create_index("idx_rel_tenant_id", "memory_relationships", ["tenant_id"])
-    op.create_index("idx_rel_tenant_source", "memory_relationships", ["tenant_id", "source_id", "relation_type"])
-    op.create_index("idx_rel_tenant_target", "memory_relationships", ["tenant_id", "target_id", "relation_type"])
+    op.create_index(
+        "idx_rel_tenant_source", "memory_relationships", ["tenant_id", "source_id", "relation_type"]
+    )
+    op.create_index(
+        "idx_rel_tenant_target", "memory_relationships", ["tenant_id", "target_id", "relation_type"]
+    )
 
     # 4. Create memory_version_history table
     op.create_table(
@@ -135,8 +162,12 @@ def upgrade() -> None:
         sa.Column("original_content", sa.Text(), nullable=False),
         sa.Column("normalized_content", sa.Text(), nullable=False),
         sa.Column("status", sa.String(32), nullable=False),
-        sa.Column("metadata", postgresql.JSONB(astext_type=sa.Text()), nullable=False, server_default="{}"),
-        sa.Column("changed_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
+        sa.Column(
+            "metadata", postgresql.JSONB(astext_type=sa.Text()), nullable=False, server_default="{}"
+        ),
+        sa.Column(
+            "changed_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()
+        ),
         sa.Column("changed_by", sa.String(128), nullable=False),
         sa.Column("change_reason", sa.String(256), nullable=True),
     )
@@ -155,8 +186,12 @@ def upgrade() -> None:
         sa.Column("namespace", sa.String(128), nullable=False),
         sa.Column("memory_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("event_type", sa.String(64), nullable=False),
-        sa.Column("timestamp", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
-        sa.Column("payload", postgresql.JSONB(astext_type=sa.Text()), nullable=False, server_default="{}"),
+        sa.Column(
+            "timestamp", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()
+        ),
+        sa.Column(
+            "payload", postgresql.JSONB(astext_type=sa.Text()), nullable=False, server_default="{}"
+        ),
     )
     op.create_index("idx_events_tenant_id", "memory_events", ["tenant_id"])
     op.create_index("idx_events_tenant_timestamp", "memory_events", ["tenant_id", "timestamp"])
@@ -164,7 +199,12 @@ def upgrade() -> None:
 
     # 6. Configure Row-Level Security (RLS)
     # Enable RLS policies for tenant isolation
-    for tbl in ["memory_records", "memory_relationships", "memory_version_history", "memory_events"]:
+    for tbl in [
+        "memory_records",
+        "memory_relationships",
+        "memory_version_history",
+        "memory_events",
+    ]:
         op.execute(f"ALTER TABLE {tbl} ENABLE ROW LEVEL SECURITY;")
         op.execute(
             f"CREATE POLICY tenant_isolation_{tbl} ON {tbl} "
@@ -177,6 +217,11 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     # Drop tables and policies
-    for tbl in ["memory_events", "memory_version_history", "memory_relationships", "memory_records"]:
+    for tbl in [
+        "memory_events",
+        "memory_version_history",
+        "memory_relationships",
+        "memory_records",
+    ]:
         op.execute(f"DROP POLICY IF EXISTS tenant_isolation_{tbl} ON {tbl};")
         op.drop_table(tbl)

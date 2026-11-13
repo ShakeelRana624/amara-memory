@@ -79,3 +79,15 @@ class MemoryRepository(Protocol):
     ) -> Sequence[MemoryRelationship]:
         """Retrieve association edges connected to the specified memory record."""
         ...
+
+    async def create_memory(self, record: MemoryRecord) -> MemoryRecord:
+        """Create and persist a new memory record (convenience alias for store)."""
+        ...
+
+    async def get_memory(self, tenant_id: str, memory_id: UUID) -> MemoryRecord | None:
+        """Retrieve a specific memory record by primary key (convenience alias for get_by_id)."""
+        ...
+
+    async def create_relationship(self, relationship: MemoryRelationship) -> MemoryRelationship:
+        """Create a relational association edge (convenience alias for add_relationship)."""
+        ...

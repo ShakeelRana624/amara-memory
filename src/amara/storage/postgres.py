@@ -7,8 +7,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any, cast
 from uuid import UUID, uuid4
 
-from sqlalchemy import delete, func, select, update
-from sqlalchemy.engine import CursorResult
+from sqlalchemy import CursorResult, delete, func, select, update
 from sqlalchemy.exc import IntegrityError
 
 from amara.contracts.query import QuerySpec
@@ -47,7 +46,7 @@ from amara.storage.schema import (
 
 
 class PostgresMemoryRepository(MemoryRepository):
-    """Production PostgreSQL 16+ storage repository with pgvector and concurrency controls."""
+    """Production PostgreSQL 16+ repository with pgvector, RLS, and OCC."""
 
     def __init__(self, db_manager: DatabaseManager) -> None:
         self.db = db_manager
@@ -169,14 +168,13 @@ class PostgresMemoryRepository(MemoryRepository):
 
             # 2. Check optimistic concurrency
             if orm_record.version != expected_version:
-                msg = (
-                    f"Optimistic lock conflict: record '{memory_id}' is at version "
-                    f"{orm_record.version}, expected {expected_version}"
-                )
                 raise InvalidMemoryStateError(
                     f"version_{orm_record.version}",
                     f"version_{expected_version}",
-                    reason=msg,
+                    reason=(
+                        f"Optimistic lock conflict: record '{memory_id}' is at "
+                        f"version {orm_record.version}, expected {expected_version}"
+                    ),
                 )
 
             # 3. Snapshot current state into version history
@@ -335,8 +333,8 @@ class PostgresMemoryRepository(MemoryRepository):
                 MemoryRecordORM.id == memory_id,
                 MemoryRecordORM.tenant_id == clean_tenant,
             )
-            del_res = cast(CursorResult[Any], await session.execute(del_stmt))
-            deleted_count += int(del_res.rowcount or 0)
+            res = cast(CursorResult[Any], await session.execute(del_stmt))
+            deleted_count += int(res.rowcount or 0)
 
             event = MemoryEvent(
                 tenant_id=clean_tenant,
@@ -346,7 +344,7 @@ class PostgresMemoryRepository(MemoryRepository):
                 payload={"cascade": cascade, "total_purged": deleted_count},
             )
             session.add(event_to_orm(event))
-            return deleted_count
+            return int(deleted_count)
 
     async def list_memories(
         self,
@@ -459,11 +457,9 @@ class PostgresMemoryRepository(MemoryRepository):
                 await session.flush()
             except IntegrityError as exc:
                 await session.rollback()
-                err_msg = (
-                    f"Failed to create relationship: connected memory records "
-                    f"must exist in tenant: {exc}"
-                )
-                raise RepositoryError(err_msg) from exc
+                raise RepositoryError(
+                    f"Failed to create relationship: connected memories must exist: {exc}"
+                ) from exc
 
     async def get_relationships(
         self,
@@ -544,7 +540,7 @@ class PostgresMemoryRepository(MemoryRepository):
         """Query memory records matching JSONB metadata criteria."""
         clean_tenant = tenant_id.strip()
         async with self.db.session(tenant_id=clean_tenant) as session:
-            # Build JSONB containment dict: e.g. ["a", "b"] -> {"a": {"b": val}}
+            # Build JSONB containment dict: e.g. ["domain", "sec"] -> {"domain": {"sec": val}}
             nested_dict: dict[str, Any] = {}
             curr = nested_dict
             for i, k in enumerate(key_path):
@@ -567,7 +563,7 @@ class PostgresMemoryRepository(MemoryRepository):
     # -----------------------------------------------------------------------
 
     async def query(self, spec: QuerySpec) -> Sequence[MemoryRecord]:
-        """Execute composite search across pgvector distance, temporal bounds, and metadata."""
+        """Execute composite search across pgvector distance, temporal windows, and metadata."""
         clean_tenant = spec.filter.tenant_id.strip()
         q_filter = spec.filter
 

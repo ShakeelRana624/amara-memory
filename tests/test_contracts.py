@@ -71,6 +71,15 @@ class MockMemoryRepository:
     ) -> Sequence[MemoryRelationship]:
         return []
 
+    async def create_memory(self, record: MemoryRecord) -> MemoryRecord:
+        return record
+
+    async def get_memory(self, tenant_id: str, memory_id: UUID) -> MemoryRecord | None:
+        return await self.get_by_id(tenant_id, memory_id)
+
+    async def create_relationship(self, relationship: MemoryRelationship) -> MemoryRelationship:
+        return relationship
+
 
 class MockEventHandler:
     """Mock event consumer verifying protocol adherence."""

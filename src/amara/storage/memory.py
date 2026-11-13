@@ -52,6 +52,11 @@ class InMemoryMemoryRepository:
             self._associations.clear()
             self._is_initialized = False
 
+    async def create_memory(self, record: MemoryRecord) -> MemoryRecord:
+        """Persist a new memory record, ensuring tenant isolation and uniqueness."""
+        await self.store(record)
+        return record
+
     async def store(self, record: MemoryRecord) -> None:
         """Store a single memory record transactionally with capacity and duplicate checks."""
         async with self._lock:
@@ -88,6 +93,10 @@ class InMemoryMemoryRepository:
             # Commit batch
             for r in records:
                 self._records[r.tenant_id][r.id] = r
+
+    async def get_memory(self, tenant_id: str, memory_id: UUID) -> MemoryRecord | None:
+        """Fetch a specific record by ID within tenant scope."""
+        return await self.get_by_id(tenant_id, memory_id)
 
     async def get_by_id(self, tenant_id: str, memory_id: UUID) -> MemoryRecord | None:
         """Fetch a specific record by ID within tenant scope."""
@@ -292,6 +301,11 @@ class InMemoryMemoryRepository:
                 tenant_assocs.pop(eid, None)
 
             return len(deleted_ids)
+
+    async def create_relationship(self, relationship: MemoryRelationship) -> MemoryRelationship:
+        """Create a relational association between two records."""
+        await self.add_relationship(relationship)
+        return relationship
 
     async def add_relationship(self, relationship: MemoryRelationship) -> None:
         """Store a relationship edge, verifying both connected nodes exist in tenant store."""
