@@ -34,6 +34,7 @@ from amara.enums import (
 from amara.exceptions import (
     AmaraError,
     CognitiveMemoryError,
+    ConcurrencyError,
     ConfigurationError,
     ConsolidationError,
     ContextReconstructionError,
@@ -122,6 +123,7 @@ __all__ = [
     "AmaraTransformersWrapper",
     "CallableTokenCounter",
     "CognitiveMemoryError",
+    "ConcurrencyError",
     "ConfigurationError",
     "ConsolidationCandidate",
     "ConsolidationError",

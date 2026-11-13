@@ -2,8 +2,8 @@
 
 AMARA is an open-source, model-agnostic cognitive memory framework engineered to empower artificial intelligence systems and autonomous agents with structured, persistent, and adaptive cognitive context.
 
-> **Project Phase**: Phase 9 — AI Framework Integrations  
-> **Status**: Core cognitive memory engine, persistent PostgreSQL/pgvector storage, hybrid retrieval, adaptive lifecycle management, Python SDK, FastAPI service, Developer Dashboard, and framework integrations (LangGraph, Transformers, FastAPI, Generic Agents) fully implemented and verified.
+> **Project Phase**: Phase 10 — Quality Assurance, Security and Research Evaluation  
+> **Status**: Comprehensive security audit, penetration testing, concurrency stress testing, empirical research evaluation (LongMemEval, LoCoMo, ablations), and release gate documentation (`SECURITY_AUDIT.md`, `TEST_REPORT.md`, `BENCHMARK_REPORT.md`, `KNOWN_LIMITATIONS.md`) fully completed and verified with 233 passing tests.
 
 ---
 

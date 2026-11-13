@@ -102,6 +102,10 @@ class RepositoryError(StorageError):
     """Raised when a repository query or transactional execution fails."""
 
 
+class ConcurrencyError(RepositoryError):
+    """Raised when an optimistic concurrency check fails during simultaneous mutation."""
+
+
 class IntelligenceError(AmaraError):
     """Base exception for memory intelligence, extraction, and cognitive processing."""
 

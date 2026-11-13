@@ -15,6 +15,7 @@ from uuid import UUID
 from amara.contracts.query import QuerySpec
 from amara.enums import LifecycleStatus, RelationType
 from amara.exceptions import (
+    ConcurrencyError,
     DuplicateMemoryError,
     MemoryNotFoundError,
     RepositoryError,
@@ -244,7 +245,7 @@ class InMemoryMemoryRepository:
 
             rec = tenant_store[memory_id]
             if rec.version != expected_version:
-                raise RepositoryError(
+                raise ConcurrencyError(
                     f"Optimistic concurrency failure: record version {rec.version} does not match "
                     f"expected {expected_version}."
                 )

@@ -1,0 +1,82 @@
+[
+  {
+    "task_id": "locomo_01_knowledge_update_temporal",
+    "category": "temporal_knowledge_update",
+    "description": "Temporal knowledge editing where a later assertion supersedes an earlier belief.",
+    "events": [
+      {
+        "turn": 1,
+        "content": "Alice Chen is Lead Software Engineer at BioTech Corp based in Seattle, Washington.",
+        "category": "semantic",
+        "timestamp_offset_days": -60
+      },
+      {
+        "turn": 2,
+        "content": "Update: Alice Chen relocated to Austin, Texas and has been promoted to VP of Artificial Intelligence.",
+        "category": "semantic",
+        "timestamp_offset_days": -1
+      }
+    ],
+    "queries": [
+      {
+        "query": "Where is Alice Chen currently located and what is her current title?",
+        "expected_current": ["Austin, Texas", "VP of Artificial Intelligence"],
+        "stale_superseded": ["Seattle, Washington", "Lead Software Engineer"],
+        "should_abstain": false
+      }
+    ]
+  },
+  {
+    "task_id": "locomo_02_multihop_associative_reasoning",
+    "category": "multihop_reasoning",
+    "description": "Evaluating 2-hop graph reasoning through associative relation edges.",
+    "events": [
+      {
+        "turn": 1,
+        "content": "Project Hyperion uses Neo4j Graph Database version 5.x for knowledge representation.",
+        "category": "semantic",
+        "link_label": "Project Hyperion -> Neo4j"
+      },
+      {
+        "turn": 2,
+        "content": "Neo4j Graph Database strictly requires OpenJDK 21 LTS runtime and minimum 16GB RAM.",
+        "category": "semantic",
+        "link_label": "Neo4j -> OpenJDK 21"
+      }
+    ],
+    "queries": [
+      {
+        "query": "What Java runtime version and memory allocation does Project Hyperion require?",
+        "expected_facts": ["OpenJDK 21", "16GB RAM"],
+        "should_abstain": false
+      }
+    ]
+  },
+  {
+    "task_id": "locomo_03_contradiction_resolution",
+    "category": "contradiction_supersede",
+    "description": "Conflicting assertions with authority and timestamps.",
+    "events": [
+      {
+        "turn": 1,
+        "content": "Database connection pool is configured with max_connections=20.",
+        "category": "semantic",
+        "timestamp_offset_days": -10
+      },
+      {
+        "turn": 2,
+        "content": "Emergency Infrastructure Update: PgBouncer pool max_connections has been raised to 100 connections.",
+        "category": "semantic",
+        "timestamp_offset_days": 0
+      }
+    ],
+    "queries": [
+      {
+        "query": "What is our current max_connections limit for database pooling?",
+        "expected_current": ["100 connections", "100"],
+        "stale_superseded": ["max_connections=20"],
+        "should_abstain": false
+      }
+    ]
+  }
+]

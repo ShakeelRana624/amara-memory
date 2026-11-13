@@ -1,0 +1,30 @@
+[
+  {
+    "task_id": "lifecycle_01_consolidation_compression",
+    "category": "episodic_to_semantic_consolidation",
+    "description": "Synthesizing 6 repetitive episodic dialogue turns into compact semantic facts.",
+    "episodic_turns": [
+      "User mentioned they went running for 5km on Monday morning in Central Park.",
+      "User mentioned they completed a 6km run on Wednesday morning in Central Park.",
+      "User mentioned they ran 10km on Saturday morning along the river path.",
+      "User stated their running shoe model is Nike Pegasus 40.",
+      "User stated they are training for the New York City Half Marathon.",
+      "User ran 8km on Sunday morning preparing for the half marathon."
+    ],
+    "verification_queries": [
+      {
+        "query": "What sport does the user train for and what shoes do they use?",
+        "expected_facts": ["Nike Pegasus 40", "Half Marathon"]
+      }
+    ]
+  },
+  {
+    "task_id": "lifecycle_02_deletion_and_retention_locks",
+    "category": "adaptive_forgetting_verification",
+    "description": "Verifying retention locked items are immutable to deletion while unlocked items purge cleanly.",
+    "items": [
+      {"content": "Locked Master HIPAA Audit Credential", "locked": true},
+      {"content": "Temporary session cache payload", "locked": false}
+    ]
+  }
+]

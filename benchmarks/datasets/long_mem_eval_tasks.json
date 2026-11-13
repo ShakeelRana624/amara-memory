@@ -1,0 +1,64 @@
+[
+  {
+    "task_id": "longmem_01_user_preferences",
+    "category": "preference_tracking",
+    "description": "Cross-session user dietary and terminal preferences with needle-in-haystack distractor dialogues.",
+    "dialogue_history": [
+      {"session": 1, "speaker": "user", "text": "Hi, I am Alex. Please note that I am strictly allergic to peanuts and shellfish."},
+      {"session": 1, "speaker": "assistant", "text": "Noted! I have recorded your strict allergy to peanuts and shellfish."},
+      {"session": 2, "speaker": "user", "text": "Today we deployed our microservice cluster to AWS us-west-2 using Terraform."},
+      {"session": 2, "speaker": "assistant", "text": "Acknowledged cluster deployment to AWS us-west-2."},
+      {"session": 3, "speaker": "user", "text": "We upgraded python version to 3.12 and all dependencies use uv package manager."},
+      {"session": 3, "speaker": "assistant", "text": "Recorded Python 3.12 and uv package manager standards."},
+      {"session": 4, "speaker": "user", "text": "Also I prefer dark theme for IDE and concise terminal outputs."},
+      {"session": 4, "speaker": "assistant", "text": "Preference saved: dark theme and concise outputs."}
+    ],
+    "test_queries": [
+      {
+        "query": "What are my dietary restrictions and food allergies?",
+        "expected_facts": ["strictly allergic to peanuts and shellfish", "peanuts", "shellfish"],
+        "should_abstain": false
+      },
+      {
+        "query": "What UI theme and output style do I prefer?",
+        "expected_facts": ["dark theme", "concise terminal outputs"],
+        "should_abstain": false
+      },
+      {
+        "query": "What brand of car do I drive?",
+        "expected_facts": [],
+        "should_abstain": true
+      }
+    ]
+  },
+  {
+    "task_id": "longmem_02_temporal_project_tracking",
+    "category": "temporal_needle_recall",
+    "description": "Multi-session architectural decisions across sprint cycles.",
+    "dialogue_history": [
+      {"session": 1, "speaker": "user", "text": "Sprint 1: We selected PostgreSQL 16 with pgvector for our vector persistence engine."},
+      {"session": 1, "speaker": "assistant", "text": "Architecture recorded: PostgreSQL 16 with pgvector."},
+      {"session": 2, "speaker": "user", "text": "Sprint 2: Team agreed that all REST endpoints must enforce rate limiting at 100 requests per minute."},
+      {"session": 2, "speaker": "assistant", "text": "Security policy saved: rate limiting at 100 rpm."},
+      {"session": 3, "speaker": "user", "text": "Sprint 3: CI pipeline now requires strict mypy type checking and ruff formatting."},
+      {"session": 3, "speaker": "assistant", "text": "CI requirement recorded: mypy strict and ruff."}
+    ],
+    "test_queries": [
+      {
+        "query": "What database and vector engine did we select in Sprint 1?",
+        "expected_facts": ["PostgreSQL 16", "pgvector"],
+        "should_abstain": false
+      },
+      {
+        "query": "What is our REST API rate limiting rule?",
+        "expected_facts": ["rate limiting", "100 requests per minute"],
+        "should_abstain": false
+      },
+      {
+        "query": "Which cloud provider are we using for Kubernetes hosting in Sprint 4?",
+        "expected_facts": [],
+        "should_abstain": true
+      }
+    ]
+  }
+]

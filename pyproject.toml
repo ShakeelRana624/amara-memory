@@ -117,6 +117,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["RUF001", "RUF003", "E501", "PLR2004", "ARG001", "ARG002", "B008"]
+"benchmarks/*" = ["T201", "E501", "ARG001", "ARG002", "PLR2004", "E402", "F402", "B007", "PTH123", "PLC0206", "F841"]
 "examples/*" = ["T201", "E501"]
 "src/amara/server/routes/*" = ["B008"]
 "src/amara/server/dependencies.py" = ["B008"]
