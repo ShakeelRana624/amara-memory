@@ -63,3 +63,4 @@ pytest
 - **Tests**: Every new feature or bug fix must include corresponding automated unit/integration tests in `tests/`.
 - **Documentation**: Update documentation in `docs/` and docstrings where appropriate. If introducing a major architectural pattern, draft an ADR in `docs/decisions/`.
 - **No Secrets**: Never commit tokens, credentials, or private configuration. Use `.env.example` as a template for environment variables.
+

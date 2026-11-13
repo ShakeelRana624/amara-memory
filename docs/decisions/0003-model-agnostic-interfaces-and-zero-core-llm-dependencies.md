@@ -26,3 +26,4 @@ The core AMARA framework will maintain **zero external LLM dependencies**:
 
 ### Negative / Considerations
 - Integrators must supply or configure embedding/reasoning callables when advanced semantic extraction is utilized.
+

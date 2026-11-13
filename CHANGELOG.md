@@ -16,3 +16,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Core project documentation: `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `LICENSE`, and `.env.example`.
 - Architecture blueprints and Architecture Decision Records (ADRs) under `docs/`.
 - Continuous Integration workflow configuration (`.github/workflows/ci.yml`).
+

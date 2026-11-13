@@ -20,3 +20,4 @@ We follow the standard Architecture Decision Record format:
 | [0002](0002-cognitive-memory-scope-and-boundaries.md) | Cognitive Memory Scope and System Boundaries | Accepted |
 | [0003](0003-model-agnostic-interfaces-and-zero-core-llm-dependencies.md) | Model-Agnostic Interfaces and Zero Core LLM Dependencies | Accepted |
 | [0004](0004-python-modern-packaging-uv-src-layout.md) | Python Modern Packaging with uv, src Layout, and Type Safety | Accepted |
+

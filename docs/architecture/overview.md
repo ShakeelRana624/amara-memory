@@ -115,3 +115,4 @@ While the open-source AMARA core is self-contained and operates entirely locally
 - Storage protocols can map to gRPC / REST API cloud endpoints.
 - Synchronization managers will handle offline-local to cloud replication.
 - Multi-agent shared memory spaces will be managed via cloud-native access control.
+

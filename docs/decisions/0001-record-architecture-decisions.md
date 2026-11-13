@@ -23,3 +23,4 @@ We will use Architecture Decision Records (ADRs) stored in `docs/decisions/` for
 
 ### Negative / Overhead
 - Requires discipline to write and review ADRs during significant architectural changes.
+

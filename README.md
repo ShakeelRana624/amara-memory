@@ -96,3 +96,4 @@ We welcome community contributions. Please review [CONTRIBUTING.md](CONTRIBUTING
 ## License
 
 AMARA is licensed under the [MIT License](LICENSE).
+

@@ -7,3 +7,4 @@ This directory contains standardized benchmark suites evaluating AMARA across ke
 - **Resource Footprint**: Memory usage and serialization payload efficiency.
 
 All benchmarks must be reproducible, automated, and decoupled from external network services.
+

@@ -28,3 +28,4 @@ AMARA will exclusively focus on **Cognitive Memory Architecture**:
 
 ### Negative / Limitations
 - Does not solve hardware VRAM exhaustion or low-level model inference paging; users must rely on dedicated inference runtimes (e.g., vLLM, TensorRT-LLM) for GPU memory management.
+
