@@ -50,3 +50,4 @@ When the cluster encounters unexpected traffic spikes:
 1. **Rate Limiter Throttling**: Lower ingress rate limits in `Caddyfile` or `nginx.conf` (e.g., from 100 r/s to 50 r/s).
 2. **Worker Interval Backoff**: Increase `AMARA_WORKER_INTERVAL` from 60s to 300s to free database connections for real-time client API requests.
 3. **Connection Pool Tuning**: Verify `AMARA_DB_POOL_SIZE` and `AMARA_DB_MAX_OVERFLOW` do not exceed PostgreSQL `max_connections`.
+

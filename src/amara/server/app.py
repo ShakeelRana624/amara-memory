@@ -70,7 +70,7 @@ def create_app(
     app = FastAPI(
         title="AMARA Cognitive Memory API",
         description=(
-            "Open-source, model-agnostic cognitive memory framework providing adaptive "
+            "Proprietary, model-agnostic cognitive memory framework providing adaptive "
             "lifecycle management, bitemporal hybrid retrieval, and prompt context reconstruction."
         ),
         version=__version__,

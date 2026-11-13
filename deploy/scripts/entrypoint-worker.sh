@@ -35,3 +35,4 @@ fi
 mkdir -p /tmp/amara
 echo "Launching AMARA Worker: amara $*"
 exec amara "$@"
+

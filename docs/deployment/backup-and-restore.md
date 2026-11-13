@@ -52,3 +52,4 @@ In the event of database failure or corrupted state, restore from verified snaps
 
 - **Recovery Point Objective (RPO)**: $< 5\text{ minutes}$ (guaranteed via continuous WAL archiving).
 - **Recovery Time Objective (RTO)**: $< 15\text{ minutes}$ for complete cluster restoration from cold backup.
+

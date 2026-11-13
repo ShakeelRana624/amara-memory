@@ -48,3 +48,4 @@ gunzip -c "${BACKUP_FILE}" | PGPASSWORD="${PGPASSWORD}" psql -h "${DB_HOST}" -p 
 echo "Database restore completed. Running post-restore migrations..."
 amara migrate --direction up
 echo "AMARA restoration and migration complete."
+

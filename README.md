@@ -22,6 +22,7 @@ Modern foundation models are strictly stateless. When building enterprise AI age
 3. **Absence of Cognitive Hierarchy**: Human cognition separates immediate working memory from episodic events, generalized semantic facts, and procedural execution skills. Naive storage treats all text identically.
 
 **AMARA provides the complete cognitive memory stack**:
+
 - **5-Tier Cognitive Memory Taxonomy**: Native handling of Working, Episodic, Semantic, Procedural, and Associative memories.
 - **Adaptive Memory Lifecycle**: Continuous salience scoring, decay curves, contradiction reconciliation, policy-driven consolidation, legal retention locks, and GDPR/CCPA-compliant forgotten state cleanup.
 - **5-Way Hybrid Retrieval Pipeline**: Seamless combination of Dense Semantic Vectors, Lexical BM25, Recency/Temporal Bounds, Knowledge Graph Relations, and Reciprocal Rank Fusion (RRF).
@@ -79,7 +80,7 @@ AMARA categorizes memory across five distinct psychological dimensions, managing
 | **Episodic** | Concrete, time-stamped autobiographical interactions and user experiences. | Exponential decay curve based on access frequency and salience. | Hybrid (Temporal + Semantic) |
 | **Semantic** | Distilled, general facts, user preferences, domain knowledge, and world truths. | High permanence; updated via deterministic contradiction resolution. | Vector + Entity Relation |
 | **Procedural** | Multi-step execution routines, workflows, tool usage skills, and action schemas. | High permanence; reinforced when successfully executed. | Lexical BM25 + Skill Name |
-| **Associative**| Graph edges connecting entities, properties, concepts, and relationships. | Dynamic edge weights modulated by co-occurrence and explicit graph links.| Graph Walk & Relational |
+| **Associative** | Graph edges connecting entities, properties, concepts, and relationships. | Dynamic edge weights modulated by co-occurrence and explicit graph links. | Graph Walk & Relational |
 
 ---
 
@@ -109,6 +110,7 @@ import asyncio
 from amara.sdk import MemoryEngine, MemoryConfig
 from amara.models.enums import MemoryType
 
+
 async def main() -> None:
     # 1. Initialize Memory Engine with custom configuration
     config = MemoryConfig(
@@ -117,7 +119,7 @@ async def main() -> None:
         default_tenant_id="enterprise_tenant_01",
         default_workspace_id="agent_workspace_alpha",
     )
-    
+
     async with MemoryEngine(config) as engine:
         # 2. Ingest structured memories (remember)
         mem1 = await engine.remember(
@@ -157,6 +159,7 @@ async def main() -> None:
         print("\n--- Reconstructed Context for System Prompt ---")
         print(context.formatted_context)
         print(f"Tokens consumed: {context.total_tokens_used} / 500")
+
 
 if __name__ == "__main__":
     asyncio.run(main())
@@ -201,15 +204,15 @@ AMARA provides a high-throughput, versioned REST API (`/api/v1`) secured via cry
 | `POST` | `/api/v1/memories` | Ingest and encode a new memory record. | `write` |
 | `GET` | `/api/v1/memories/{id}` | Inspect memory details, facts, entities, and provenance. | `read` |
 | `PATCH` | `/api/v1/memories/{id}` | Update memory content, importance, or temporal attributes. | `write` |
-| `DELETE`| `/api/v1/memories/{id}` | Verified deletion propagating through vector and relational indexes. | `write` |
+| `DELETE` | `/api/v1/memories/{id}` | Verified deletion propagating through vector and relational indexes. | `write` |
 | `POST` | `/api/v1/memories/search` | Multi-strategy hybrid memory search with metadata filtering. | `read` |
 | `POST` | `/api/v1/memories/consolidate` | Trigger policy-driven memory consolidation and deduplication. | `write` |
 | `POST` | `/api/v1/context/reconstruct` | Synthesize token-budgeted prompt context with citations. | `read` |
 | `GET` | `/api/v1/usage` | Inspect tenant memory consumption, type distributions, and limits. | `read` |
 | `GET` | `/api/v1/health` | Service liveness, readiness, and database probe. | Public |
 | `POST` | `/api/v1/keys` | Provision new tenant API keys (admin). | `admin` |
-| `POST` | `/api/v1/keys/{id}/rotate`| Atomically rotate an API key without service downtime. | `admin` |
-| `DELETE`| `/api/v1/keys/{id}` | Instantly revoke an API key. | `admin` |
+| `POST` | `/api/v1/keys/{id}/rotate` | Atomically rotate an API key without service downtime. | `admin` |
+| `DELETE` | `/api/v1/keys/{id}` | Instantly revoke an API key. | `admin` |
 
 ### REST API Ingestion Example
 
@@ -233,6 +236,7 @@ curl -X POST http://localhost:8000/api/v1/memories \
 AMARA includes a modern, responsive web dashboard located in `dashboard/`, engineered with **Next.js 14 (App Router)**, **TypeScript**, and **Tailwind CSS**.
 
 ### Key Dashboard Modules
+
 - **Overview & Intelligence Radar**: Real-time memory consumption, distribution across cognitive memory types, and operation throughput.
 - **Memory Explorer**: Rich filtering by tenant, workspace, memory type, confidence thresholds, and full-text keyword search.
 - **Provenance & Inspection View**: Inspect extracted subject-predicate-object facts, named entities, salience history, and source origin.
@@ -287,6 +291,7 @@ For advanced production clustering, disaster recovery runbooks, and Kubernetes m
 AMARA integrates seamlessly into existing agent and LLM frameworks through decoupled adapters:
 
 ### 1. LangGraph Integration (`amara.integrations.langgraph`)
+
 ```python
 from amara.integrations.langgraph import AmaraMemoryNode, AmaraLangGraphAdapter
 
@@ -300,6 +305,7 @@ post_node = AmaraMemoryNode(adapter=adapter, mode="reflect")
 ```
 
 ### 2. Hugging Face Transformers (`amara.integrations.transformers`)
+
 ```python
 from amara.integrations.transformers import AmaraTransformersAugmenter
 
@@ -311,6 +317,7 @@ augmented_prompt = await augmenter.augment_prompt(
 ```
 
 ### 3. Distributed FastAPI External Memory Service (`amara.integrations.fastapi`)
+
 ```python
 from amara.integrations.fastapi import AmaraFastAPIClient
 
@@ -340,6 +347,7 @@ AMARA was rigorously benchmarked across standard long-term memory benchmarks (**
 | **AMARA Cognitive Memory** | **0.916** | **0.887** | **94.8%** | **96.2%** | **-77.8% (4.5x savings)** | **14.8 ms** |
 
 ### Benchmark Key Takeaways
+
 - **94.8% Temporal Reasoning Accuracy**: AMARA successfully distinguishes current valid facts from superseded historical versions, whereas standard Vector RAG confuses past and present.
 - **77.8% Token Context Reduction**: Context reconstruction dynamically filters unneeded narrative filler, delivering higher agent response precision at less than one-fourth the token cost.
 - **Deterministic Contradiction Reconciliation**: Opposing claims are tracked with temporal validity windows and confidence tracking rather than silently overwritten.
@@ -359,6 +367,7 @@ The codebase has undergone a complete 10-phase engineering audit and automated s
 - **Zero Vulnerabilities**: Verified safe handling of SQL injection, prompt injection mitigation, cryptographic API key hashing, and verified deletion propagation.
 
 Refer to the release audit documentation for full certificates:
+
 - [DEPLOYMENT_REPORT.md](DEPLOYMENT_REPORT.md) — Production deployment audit, load test benchmarks, and infrastructure readiness.
 - [SECURITY_AUDIT.md](SECURITY_AUDIT.md) — Security penetration audit, isolation guarantees, and threat analysis.
 - [TEST_REPORT.md](TEST_REPORT.md) — Exhaustive test matrix and category verification.
@@ -373,6 +382,7 @@ AMARA is a commercial enterprise software product. **All rights are reserved.**
 Unauthorized copying, reverse engineering, redistribution, sublicensing, or hosting as an unauthorized cloud service is strictly prohibited under the [Proprietary Commercial Software License](LICENSE).
 
 For enterprise licensing, on-premise deployments, source code access agreements, or commercial support contracts:
+
 - **Commercial Inquiries**: [commercial@amara.ai](mailto:commercial@amara.ai)
 - **Repository**: [https://github.com/ShakeelRana624/amara-memory](https://github.com/ShakeelRana624/amara-memory)
 - **Copyright**: &copy; 2026 AMARA. All Rights Reserved.

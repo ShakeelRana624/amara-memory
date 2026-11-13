@@ -5,9 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.1.0] - 2026-11-13
 
 ### Added
+- **Phase 12: Public Release and Research Publication**:
+  - Published comprehensive scientific research manuscript: `docs/research/amara-research-paper.md` documenting architecture, 5-tier taxonomy, bitemporal hybrid retrieval, ablation studies, and empirical benchmarks.
+  - Interactive Developer Onboarding Tour: `examples/developer_onboarding_tour.py` executing a full cognitive lifecycle demonstration in 60 seconds.
+  - Developer Onboarding Guide: `docs/guides/developer-onboarding.md` covering the 8-stage developer adoption journey.
+  - Cloud Hosted Launch Verification: `docs/deployment/cloud-launch-verification.md` validating authentication, workspace isolation, rate limiting, and dashboard exploration.
+  - Commercial Release Packaging: Versioned 0.1.0 wheel and sdist distributions via `uv build`.
+  - Final Release Announcement & Overview: `RELEASE_ANNOUNCEMENT.md`.
+- **Phase 11: Production Deployment & Containerization**:
+  - Multi-stage Docker containers for FastAPI backend (`deploy/docker/Dockerfile.api`), Cognitive Worker (`deploy/docker/Dockerfile.worker`), and Next.js 14 Dashboard (`deploy/docker/Dockerfile.dashboard`).
+  - Single-command orchestration: `docker-compose.yml` connecting PostgreSQL 16 + pgvector, API, Worker, Dashboard, and Caddy Gateway with automated TLS 1.3.
+  - Automated database startup schema synchronization via Alembic (`deploy/scripts/entrypoint-api.sh`).
+  - Disaster recovery and backup automation: `deploy/scripts/backup-database.sh` (SHA-256 verified) and `deploy/scripts/restore-database.sh`.
+  - Asynchronous background cognitive maintenance worker daemon (`src/amara/worker.py` and `amara worker` CLI).
+  - Empirical load test harness (`benchmarks/load_test.py`) validating **50 concurrent workers** across 600 operations with **0.00% error rate** and sub-200ms ingestion P50 latency.
+  - Production Deployment & Operations Audit Report: `DEPLOYMENT_REPORT.md` (Readiness Verdict: APPROVED).
+- **Proprietary Commercial Transition**:
+  - Transferred codebase to Proprietary Commercial Software License (All rights reserved).
+  - CLI management tool (`amara serve`, `amara worker`, `amara create-key`, `amara migrate`, `amara benchmark`, `amara info`).
 - **Phase 10: Quality Assurance, Security and Research Evaluation**:
   - **Comprehensive Security Penetration & Tenant Isolation Audit**:
     - Validated zero known vulnerabilities across all 28 production dependencies via `pip-audit`.

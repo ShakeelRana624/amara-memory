@@ -40,3 +40,4 @@ fi
 
 echo "Launching AMARA process: amara $*"
 exec amara "$@"
+

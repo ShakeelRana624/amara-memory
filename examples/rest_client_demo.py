@@ -42,7 +42,7 @@ async def main() -> None:
     # Build FastAPI application
     app = create_app(engine=engine, key_store=key_store)
 
-    transport = ASGITransport(app=app)  # type: ignore[arg-type]
+    transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         # 2. Check Service Health
         print("\n--- 2. Health Check (GET /api/v1/health) ---")

@@ -36,3 +36,4 @@ echo "Checksum: $(cat "${CHECKSUM_FILENAME}")"
 echo "Applying retention cleanup (older than ${RETENTION_DAYS} days)..."
 find "${BACKUP_DIR}" -type f -name "amara_backup_*.sql.gz*" -mtime +"${RETENTION_DAYS}" -delete
 echo "Retention cleanup complete."
+

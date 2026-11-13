@@ -60,18 +60,16 @@ export function Sidebar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-mono transition-all duration-150 ${
-                  isActive
-                    ? "bg-indigo-600/10 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-400 font-semibold border-l-2 border-indigo-600 dark:border-indigo-400 pl-2.5"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60"
-                }`}
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-mono transition-all duration-150 ${isActive
+                  ? "bg-indigo-600/10 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-400 font-semibold border-l-2 border-indigo-600 dark:border-indigo-400 pl-2.5"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60"
+                  }`}
               >
                 <Icon
-                  className={`w-4 h-4 ${
-                    isActive
-                      ? "text-indigo-600 dark:text-indigo-400"
-                      : "text-slate-400 dark:text-slate-500"
-                  }`}
+                  className={`w-4 h-4 ${isActive
+                    ? "text-indigo-600 dark:text-indigo-400"
+                    : "text-slate-400 dark:text-slate-500"
+                    }`}
                 />
                 <span className="flex-1">{item.name}</span>
                 {item.badge && (

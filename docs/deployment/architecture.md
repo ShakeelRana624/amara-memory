@@ -95,3 +95,4 @@ This document describes the enterprise production deployment topology, network b
 - **Engine**: PostgreSQL 16+ with `pgvector` extension.
 - **Isolation**: Tenant separation via Row-Level Security (`app.current_tenant_id`).
 - **Connection Pooling**: SQLAlchemy async engine with `asyncpg` (pool_size=30, max_overflow=20).
+
