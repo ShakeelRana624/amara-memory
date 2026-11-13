@@ -39,7 +39,11 @@ dependencies = [
     "fastapi>=0.162.5",
     "uvicorn>=0.54.0",
     "httpx>=0.28.1",
+    "click>=8.0.0",
 ]
+
+[project.scripts]
+amara = "amara.cli:cli"
 
 [project.optional-dependencies]
 dev = [
@@ -70,11 +74,10 @@ all-integrations = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/amara-ai/amara"
-Documentation = "https://github.com/amara-ai/amara/tree/main/docs"
-Repository = "https://github.com/amara-ai/amara.git"
-Issues = "https://github.com/amara-ai/amara/issues"
-Changelog = "https://github.com/amara-ai/amara/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/ShakeelRana624/amara-memory"
+Documentation = "https://github.com/ShakeelRana624/amara-memory#readme"
+Repository = "https://github.com/ShakeelRana624/amara-memory.git"
+Issues = "https://github.com/ShakeelRana624/amara-memory/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/amara"]
